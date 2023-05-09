@@ -1,0 +1,4 @@
+Para empezar creamos nuestro proyecto de symfony como siempre hasta ahora, debemos cnfigurar la base de datos, las cors, usando nelmio y creamos el user y el resto de entidades con las que trabajaremos en nuestro proyecto, una vez realizado esto, simplemente tendremos que lanzar el back y configurar las rutas de la API a través de la cuál pediremos y mandaremos datos.
+
+
+Cabe destacar que debemos instalar el uso de react scripts.

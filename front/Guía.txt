@@ -1,0 +1,1 @@
+Creamos nuestro proyecto de react que es el framework que vamos a usar y lo único que debemos hacer es trabajar mediante una API REST para comunicar el servidor con nuestro proyecto de react y así maquetar la página y darle funcionalidad.

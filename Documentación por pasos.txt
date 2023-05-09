@@ -1,0 +1,49 @@
+Parte del Front
+
+Creamos nuestra aplicación react
+npx create-react-app front
+
+Hacemos un borrado de ficheros innecesarios y saneamos el código
+
+Tras esto cambiamos a la ruta del proyecto creado para proceder a implementar lo necesario.
+
+Tanto instalaciones de dependencias como componentes , helpers, contexts ....
+
+Con esto manejamos nuestro front que tendrá todas las validaciones
+
+Incluimos estilos con bootstrap y sass / Material UI
+
+
+
+Parte del back
+
+Creamos nuestro back con symfony 
+symfony new back --webapp
+
+Configuramos una base de datos en el .env (podemos crearla con comandos con symfony o crearla a mano desde mysql/phpmyadmin)
+
+Para crear la base de datos no dirigimos a al simbolo del sistema y ejecutamos el siguiente comando
+
+php bin/console doctrine:database:create
+
+Importante añadir las CORS -> 
+
+composer require nelmio/cors-bundle y configuramos el archivo config/packages/nelmio_cors.bundle
+
+Creamos las entidades con sus relaciones y campos tal y como se aprecia en el diagrama y modelo entidad-relación
+
+En este caso no vamos a necesitar los crud's ya que vamos a realizar toda lógica desde el ApiController
+
+
+
+Debemos hacer 
+
+npm start 
+
+desde el front y 
+
+symfony server:start
+
+desde el back
+
+Así conseguimos que aquello que use la ruta del ApiController de Symfony desde React funcione gracias a métodos asíncronos
