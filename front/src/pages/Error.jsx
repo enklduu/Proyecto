@@ -7,16 +7,25 @@ const Error = () => {
 
   return (
     <>
-      <div id="error-page">
-        <h1>Oops!</h1>
-        <p>Sorry, an unexpected error has occurred.</p>
-        <p>
-          <i>{miError.statusText || miError.message}</i>
-        </p>
-      </div>
-      <Link to={"/"} className="text-center mb-4">
-        Volver a la vista principal
-      </Link>
+      <section className="page_404">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="sol-sm-12 col-sm-offset-1 text-center">
+                <div className="four_zero_four_bg">
+                  <h1 className="text-center">404</h1>
+                </div>
+                <div className="contant_box_404">
+                  <h3 className="h2">Ni flores quedan aquí</h3>
+                  <Link className="link_404" to={`/`}>
+                    Home 🏠
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

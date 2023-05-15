@@ -1,4 +1,4 @@
-const getProduct = async (idProduct) => {
+const getProducts = async (idProduct) => {
     const url = `https://fakestoreapi.com/products/${idProduct}`;
     try {
       const response = await fetch(url);
@@ -8,5 +8,5 @@ const getProduct = async (idProduct) => {
       console.error(e);
     }
   };
-  export default getProduct;
+  export default getProducts;
   
