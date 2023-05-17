@@ -3,6 +3,9 @@ import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 // import { useLoaderData } from "react-router-dom";
 import CookieConsent from "react-cookie-consent";
+// import Modal from "../components/Modal";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Main = () => {
   // const data = useLoaderData();
@@ -10,6 +13,7 @@ const Main = () => {
 
   return (
     <>
+    <Header/>
       <CookieConsent
         location="bottom"
         buttonText="Acepto"
@@ -23,8 +27,10 @@ const Main = () => {
         <Row>
           {/* <Col className="d-flex flex-wrap"><Productos products={data}/></Col>
           <Col className=""><Carrito/></Col> */}
+          {/* <Modal></Modal> */}
         </Row>
       </Container>
+      <Footer/>
     </>
 
     // <Productos products={data}/>

@@ -88,7 +88,7 @@ class ApiController extends AbstractController
         }
 
         // Devolver los datos del usuario en formato JSON
-        $userJSON = $apiFormatter->users($user);
+        $userJSON = $apiFormatter->data($user);
         return new JsonResponse($userJSON, 201);
     }
     // Devuelve un usuario por id
@@ -106,7 +106,7 @@ class ApiController extends AbstractController
     public function userByEmail(ApiFormatter $apiFormatter, UserRepository $userRepository, $email): JsonResponse
     {
         $user = $userRepository->findOneByEmail($email);
-        $userJSON = "Este email no pertenece a ningún usuario";
+        $userJSON = "Este email no lo conozco";
         if($user){
             $userJSON = $apiFormatter->data($user);
         }
