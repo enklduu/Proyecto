@@ -91,15 +91,6 @@ class ApiController extends AbstractController
         $userJSON = $apiFormatter->data($user);
         return new JsonResponse($userJSON, 201);
     }
-    // Devuelve un usuario por id
-    // #[Route('/users/{id}', name: 'app_api_users_show', methods:["GET"])]
-    // public function userShow(ApiFormatter $apiFormatter, UserRepository $userRepository, User $user): JsonResponse
-    // {
-    //     if($user){
-    //         $userJSON = $apiFormatter->userToArray($user);
-    //     }
-    //     return new JsonResponse($userJSON);
-    // } 
 
     // Devuelve los productos
     #[Route('/products', name: 'app_api_products_index', methods:["GET"])]
@@ -113,7 +104,7 @@ class ApiController extends AbstractController
         return new JsonResponse($productsJSON);
     }
     // Devuelve un producto
-    #[Route('/products/{id}', name: 'app_api_products_show', methods:["GET"])]
+    #[Route('/product/{id}', name: 'app_api_products_show', methods:["GET"])]
     public function productById(ApiFormatter $apiFormatter, ProductsRepository $productsRepository, Products $products): JsonResponse
     {
         if($products){

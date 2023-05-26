@@ -1,76 +1,50 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import { Navbar, Nav } from "react-bootstrap";
 
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <Link className="navbar-brand" to="/">
-        Home
-      </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
-          {user == null && (
-            <>
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">
+    <header className="header">
+      <Navbar bg="dark" variant="dark" expand="lg" className="navbar-with-bg">
+        <Navbar.Brand as={Link} to="/">
+          Home
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarNav" />
+        <Navbar.Collapse id="navbarNav">
+          <Nav className="mr-auto">
+            {user == null && (
+              <>
+                <Nav.Link as={Link} to="/login">
                   Login
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/register">
+                </Nav.Link>
+                <Nav.Link as={Link} to="/register">
                   Register
-                </Link>
-              </li>
-            </>
-          )}
-          {user != null && (
-            <>
-              <li className="nav-item">
-                <Link className="nav-link" to="/user">
+                </Nav.Link>
+              </>
+            )}
+            {user != null && (
+              <>
+                <Nav.Link as={Link} to="/user">
                   User
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/cart">
+                </Nav.Link>
+                <Nav.Link as={Link} to="/cart">
                   Cart
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/gallery">
-                  Gallery
-                </Link>
-              </li>
-              {user.roles.includes("ROLE_ADMIN") && (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/admin">
+                </Nav.Link>
+                {user.roles.includes("ROLE_ADMIN") && (
+                  <Nav.Link as={Link} to="/admin">
                     Admin
-                  </Link>
-                </li>
-              )}
-              <li className="nav-item">
-                <Link className="nav-link" onClick={logout}>
-                  Cerrar sesión
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
-    </nav>
+                  </Nav.Link>
+                )}
+                <Nav.Link onClick={logout}>Cerrar sesión</Nav.Link>
+              </>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </header>
   );
 };
 

@@ -10,7 +10,7 @@ const Layout = () => {
 
   return (
     <>
-    <Header/>
+    {auth.user ? <Header/> : <></>}
     <Outlet/>
     {auth.user ? <Footer /> : <></>}
     </>

@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 const LoginForm = () => {
   const auth = useContext(AuthContext);
 
@@ -74,6 +75,7 @@ const LoginForm = () => {
           </div>
         </div>
       ) : (
+        <>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group controlId="email">
             <Form.Label>Correo electrónico:</Form.Label>
@@ -108,6 +110,8 @@ const LoginForm = () => {
             Log In
           </Button>
         </Form>
+        ¿No tienes una cuenta? - <Link to={"/register"}>Registrate</Link>
+        </>
       )}
     </>
   );

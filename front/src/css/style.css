@@ -63,3 +63,18 @@
     display: flex;
     align-items: center;
   }
+  
+  .navbar-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+  }
+  /* .navbar-with-bg {
+    background-image: url('../images/2.jpg');
+    background-size: cover;
+    background-position: center;
+  } */
+  

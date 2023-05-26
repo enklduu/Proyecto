@@ -1,4 +1,6 @@
 import { createContext, useState, useEffect} from "react";
+import { Navigate } from "react-router-dom";
+
 
 export const AuthContext = createContext();
 
@@ -14,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
       localStorage.removeItem('user');
       setUser(null);
-      window.location.reload();
+      <Navigate to="/" replace={true} />
     };
   
     useEffect(() => {

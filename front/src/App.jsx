@@ -9,14 +9,13 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import UserInfo from "./pages/UserInfo";
-import { useContext } from "react";
-import { AuthContext } from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Cart from "./pages/Cart";
+import { useContext } from "react";
+import { AuthContext } from "./contexts/AuthContext";
 
 const App = () => {
   const { user } = useContext(AuthContext);
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -27,7 +26,7 @@ const App = () => {
         {
           path: "/login",
           element: (
-            <PrivateRoute isAllowed={user ? false : true}>
+            <PrivateRoute isAllowed={ user && localStorage.getItem("user") ? false : true}>
               <Login />
             </PrivateRoute>
           ),
@@ -35,7 +34,7 @@ const App = () => {
         {
           path: "/register",
           element: (
-            <PrivateRoute isAllowed={user ? false : true}>
+            <PrivateRoute isAllowed={ user ? false : true}>
               <Register />
             </PrivateRoute>
           ),
@@ -43,7 +42,7 @@ const App = () => {
         {
           path: "/user",
           element: (
-            <PrivateRoute isAllowed={user ? true : false}>
+            <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
               <UserInfo />
             </PrivateRoute>
           ),
@@ -51,14 +50,14 @@ const App = () => {
         {
           path: "/cart",
           element: (
-            <PrivateRoute isAllowed={user ? true : false}>
+            <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
               <Cart/>
             </PrivateRoute>
           ),
         },
         {
           path: "/admin",
-          element: <PrivateRoute isAllowed={(user && user.roles.includes('ROLE_ADMIN') )? true : false}>
+          element: <PrivateRoute isAllowed={(localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).roles.includes('ROLE_ADMIN') )? true : false}>
           <Admin />
         </PrivateRoute>,
         },
