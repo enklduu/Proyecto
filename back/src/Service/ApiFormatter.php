@@ -43,6 +43,7 @@ class ApiFormatter
         'last_name' => $user->getLastName(),
         'valoration' => $user->getValoration(),
         'show_valoration' => $user->isShowValoration(),
+        'roles' => $user->getRoles(),
         'orders' => $orders,
         'reviews' => $reviews,  
     );

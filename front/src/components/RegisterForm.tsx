@@ -1,10 +1,20 @@
 import React from "react";
 import { useFormik } from "formik";
+import { CSSProperties } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
+import { redirect } from "react-router-dom";
 
 const RegisterForm = () => {
+  
+  const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "#c84f60",
+  };
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Este campo es requerido"),
     lastname: Yup.string().required("Este campo es requerido"),
@@ -15,7 +25,7 @@ const RegisterForm = () => {
       .min(6, "La contraseña debe tener al menos 6 caracteres")
       .required("Este campo es requerido"),
     password2: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Las contraseñas deben coincidir")
+      .oneOf([Yup.ref("password")], "Las contraseñas deben coincidir")
       .required("Este campo es requerido"),
   });
 
@@ -29,19 +39,40 @@ const RegisterForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      formik.setSubmitting(true);
       axios
         .post("http://127.0.0.1:8000/api/register", values)
         .then((response) => {
           console.log(response);
+          redirect("/login");
         })
         .catch((error) => {
-          console.log(error);
+          formik.setSubmitting(false);
+          // console.log(error);
+          formik.resetForm();
+          alert(error.response.data);
+
         })
-        .finally(() => formik.setSubmitting(false));
     },
   });
 
   return (
+    <>
+    {formik.isSubmitting ? (
+      <div className="container mt-5 pt-3">
+        {" "}
+        <h1 className="text-center">Loading...</h1>
+        <div>
+          <ClipLoader
+            color={"#ffffff"}
+            cssOverride={override}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      </div>
+    ) : (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group controlId="name">
         <Form.Label>Nombre de usuario:</Form.Label>
@@ -110,7 +141,9 @@ const RegisterForm = () => {
       <Button variant="primary" type="submit" disabled={formik.isSubmitting}>
         Registrarse
       </Button>
-    </Form>
+      </Form>
+      )}
+    </>
   );
 };
 export default RegisterForm;

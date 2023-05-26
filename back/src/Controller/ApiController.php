@@ -99,19 +99,7 @@ class ApiController extends AbstractController
     //         $userJSON = $apiFormatter->userToArray($user);
     //     }
     //     return new JsonResponse($userJSON);
-    // }
-
-    // Devuelve un usuario por email
-    #[Route('/{email}', name: 'app_api_users_show', methods:["GET"])]
-    public function userByEmail(ApiFormatter $apiFormatter, UserRepository $userRepository, $email): JsonResponse
-    {
-        $user = $userRepository->findOneByEmail($email);
-        $userJSON = "Este email no lo conozco";
-        if($user){
-            $userJSON = $apiFormatter->data($user);
-        }
-        return new JsonResponse($userJSON);
-    }
+    // } 
 
     // Devuelve los productos
     #[Route('/products', name: 'app_api_products_index', methods:["GET"])]
@@ -132,5 +120,43 @@ class ApiController extends AbstractController
             $productsJSON = $apiFormatter->productToArray($products);
         }
         return new JsonResponse($productsJSON);
+    }
+
+    // Modifica el user
+    #[Route('/valoration', name: 'app_api_valoration', methods:["PUT"])]
+    public function valoration(ApiFormatter $apiFormatter, UserRepository $userRepository,Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        
+        $showValoration = $data['data']['show_valoration'] ?? null;
+        $valoration = $data['data']['valoration'] ?? null;
+        
+        $user = $userRepository->findOneByEmail($data['data']['email']);
+
+        if ($showValoration !== null) {
+            $user->setShowValoration($showValoration);
+        }
+    
+        if ($valoration !== null) {
+            $user->setValoration($valoration);
+        }
+
+        $userRepository->save($user, true);
+
+        $userJSON = $apiFormatter->data($user);
+
+        return new JsonResponse($userJSON);
+    }    
+
+    // Devuelve un usuario por email
+    #[Route('/{email}', name: 'app_api_users_show', methods:["GET"])]
+    public function userByEmail(ApiFormatter $apiFormatter, UserRepository $userRepository, $email): JsonResponse
+    {
+        $user = $userRepository->findOneByEmail($email);
+        $userJSON = "Este email no lo conozco";
+        if($user){
+            $userJSON = $apiFormatter->data($user);
+        }
+        return new JsonResponse($userJSON);
     }
 }

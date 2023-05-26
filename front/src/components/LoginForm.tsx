@@ -11,8 +11,8 @@ const LoginForm = () => {
 
   const override: CSSProperties = {
     display: "block",
-    margin: "0 auto",
-    borderColor: "red",
+    margin: "auto auto",
+    borderColor: "#c84f60", 
   };
 
   const validationSchema = Yup.object().shape({
@@ -31,21 +31,28 @@ const LoginForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       formik.setSubmitting(true);
       // const userData = values;
       // auth.login(userData);
       axios
         .post("http://127.0.0.1:8000/api/login", values)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           const userData = response.data; // Suponiendo que el servidor devuelve los datos del usuario
           auth.login(userData);
           formik.setSubmitting(false);
+          formik.resetForm();
         })
         .catch((error) => {
           console.log(error);
           formik.setSubmitting(false);
+          formik.resetForm();
+          if(error.response.status === 402){
+            alert("Este correo no existe en la base de datos");
+          }else if (error.response.status === 401){
+            alert("La contraseña es errónea");
+          }
         });
     },
   });
@@ -53,7 +60,7 @@ const LoginForm = () => {
   return (
     <>
       {formik.isSubmitting ? (
-        <div>
+        <div className="container mt-5 pt-3">
           {" "}
           <h1 className="text-center">Loading...</h1>
           <div>
