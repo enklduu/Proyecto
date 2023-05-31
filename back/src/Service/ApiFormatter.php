@@ -8,18 +8,17 @@ class ApiFormatter
     {
         $userJSON=[];
         $orders = [];
-        $orderProducts=[];
         $reviews = [];
-
         foreach ($user->getOrders() as $order) {
             $obj = new \stdClass();
             $obj -> id = $order->getId();
-            $obj -> total_price = $order->getTotalPrice();
+            $obj -> total_price = $order->getTotal();
             $obj -> date = $order->getDate();
-            foreach ($order->getOrdersProducts() as $orderproduct) {
+            foreach ($order->getOrderProducts() as $orderproduct) {
                 $obj2 = new \stdClass();
                 // $obj2 -> id = $orderproduct->getId();
                 $obj2 -> id_product = $orderproduct->getProduct()->getId();
+                $obj2 -> name = $orderproduct->getProduct()->getName();
                 $obj2 -> price = $orderproduct->getProduct()->getPrice();
                 $obj2 -> img = $orderproduct->getProduct()->getImg();
                 $obj2 -> amount = $orderproduct->getAmount();
@@ -29,10 +28,11 @@ class ApiFormatter
             $orders[]=($obj);
         }
 
-        foreach ($user->getReviews() as $reviews) {
+        foreach ($user->getReviews() as $review) {
 
             $obj = new \stdClass();
-            // $obj -> id = $userProducts->getId();
+            $obj -> text = $review->getText();
+            $obj -> valoration = $review->getValoration();
             $reviews[]=($obj);
         }
 
@@ -49,16 +49,75 @@ class ApiFormatter
     );
     return $userJSON;
     }
+
+    // Método para parsear la categoria 
+    public function categoryToArray($category): array
+    {
+        $categoryJSON= array(
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'visible' => $category->getVisible(),
+          );
+          return $categoryJSON;
+    }
+
+
+      // Método para parsear orders 
+    public function orderToArray($order): array
+    {
+        $orderProducts=[];
+
+        foreach ($order->getOrderProducts() as $orderproduct) {
+            $obj = new \stdClass();
+            // $obj -> id = $orderproduct->getId();
+            $obj -> id_product = $orderproduct->getProduct()->getId();
+            $obj -> name = $orderproduct->getProduct()->getName();
+            $obj -> price = $orderproduct->getProduct()->getPrice();
+            $obj -> img = $orderproduct->getProduct()->getImg();
+            $obj -> amount = $orderproduct->getAmount();
+            $orderProducts[]=($obj);
+        }
+
+        $orderJSON= array(
+            // 'id' => $order->getId(),
+            'total' => $order->getTotal(),
+            'date' => $order->getDate(),
+            'orderProducts' => $orderProducts,
+          );
+          return $orderJSON;
+    }
+
+     // Método para sacar producto
     public function productToArray($product): array
     {
+        $reviews = [];
+        foreach ($product->getReviews() as $review) {
+
+            $obj = new \stdClass();
+            $obj -> text = $review->getText();
+            $obj -> valoration = $review->getValoration();
+            $reviews[]=($obj);
+        }
+        
         $productJSON= array(
             'id' => $product->getId(),
             'name' => $product->getName(),
             'description' => $product->getDescription(),
             'price' => round($product->getPrice(),2),
             'visible' => $product->isVisible(),
-            'images' => $product->getImages(),
+            'img' => $product->getImg(),
+            'stock' => $product->getStock(),
+            'reviews' => $reviews,
           );
           return $productJSON;
     }
+    
+    // Función para los datos de la vista admin
+    // public function adminInArray($admindata): array
+    // {
+    //     $JSON= array(
+    //         'average_valoration' => $admindata['average'],
+    //       );
+    //       return $JSON;
+    // }
 }

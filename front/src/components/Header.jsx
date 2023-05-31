@@ -21,21 +21,24 @@ const Header = () => {
                   Login
                 </Nav.Link>
                 <Nav.Link as={Link} to="/register">
-                  Register
+                  Registro
                 </Nav.Link>
               </>
             )}
             {user != null && (
               <>
                 <Nav.Link as={Link} to="/user">
-                  User
+                  Tu perfil
                 </Nav.Link>
                 <Nav.Link as={Link} to="/cart">
-                  Cart
+                  Carrito
+                </Nav.Link>
+                <Nav.Link as={Link} to="/products">
+                  Tienda
                 </Nav.Link>
                 {user.roles.includes("ROLE_ADMIN") && (
                   <Nav.Link as={Link} to="/admin">
-                    Admin
+                    Administración
                   </Nav.Link>
                 )}
                 <Nav.Link onClick={logout}>Cerrar sesión</Nav.Link>

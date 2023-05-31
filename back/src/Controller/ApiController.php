@@ -6,7 +6,10 @@ use App\Service\ApiFormatter;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Entity\Products;
+use App\Entity\Order;
 use App\Repository\ProductsRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,7 +95,7 @@ class ApiController extends AbstractController
         return new JsonResponse($userJSON, 201);
     }
 
-    // Devuelve los productos
+    // Devuelve todos los productos
     #[Route('/products', name: 'app_api_products_index', methods:["GET"])]
     public function productsIndex(ApiFormatter $apiFormatter, ProductsRepository $productsRepository): JsonResponse
     {
@@ -103,14 +106,83 @@ class ApiController extends AbstractController
         }
         return new JsonResponse($productsJSON);
     }
-    // Devuelve un producto
-    #[Route('/product/{id}', name: 'app_api_products_show', methods:["GET"])]
-    public function productById(ApiFormatter $apiFormatter, ProductsRepository $productsRepository, Products $products): JsonResponse
+    // Devuelve los productos cuyas categorias se pasen como parámetro, se deben pasar separando con una coma y espacios a ambos lados
+    #[Route('/products/{categories}', name: 'app_api_products_show', methods:["GET"])]
+    public function productByCategories(ApiFormatter $apiFormatter, CategoryRepository $categoryRepository, ProductsRepository $productsRepository, Request $request): JsonResponse
     {
-        if($products){
-            $productsJSON = $apiFormatter->productToArray($products);
+        $categoriesString = $request->attributes->get('categories');
+        $categoryNames = explode(',', $categoriesString);
+        
+        $categories = [];
+        foreach ($categoryNames as $categoryName) {
+            $category = $categoryRepository->findOneByName($categoryName);
+            if ($category) {
+                $categories[] = $category;
+            }
         }
+        
+        $products = [];
+        if (!empty($categories)) {
+            $products = $categories[0]->getProducts();
+            for ($i = 1; $i < count($categories); $i++) {
+                $products = array_intersect($products, $categories[$i]->getProducts());
+            }
+        }
+        
+        $productsJSON = [];
+        foreach ($products as $product) {
+            $productsJSON[] = $apiFormatter->productToArray($product);
+        }
+        
         return new JsonResponse($productsJSON);
+    }
+
+    //  // Devuelve un product
+    //  #[Route('/products/{category}', name: 'app_api_products_show', methods:["GET"])]
+    //  public function productById(ApiFormatter $apiFormatter, CategoryRepository $categoryRepository ,ProductsRepository $productsRepository, Request $request): JsonResponse
+    //  {
+    //     $categoryName = $request->attributes->get('category');
+    //     $category = $categoryRepository->findOneByName($categoryName);
+    //     $products = $category->getProducts();
+    //     $productsJSON= [];
+    //     foreach ($products as $product) {
+    //         $productsJSON [] = $apiFormatter->productToArray($product);
+    //     }
+    //     return new JsonResponse($productsJSON);
+    //  }
+
+    // Devuelve todas las categorías
+    #[Route('/category', name: 'app_api_categories', methods:["GET"])]
+    public function categoriesIndex(ApiFormatter $apiFormatter, CategoryRepository $categoryRepository): JsonResponse
+    {
+        $categories = $categoryRepository->findAll();
+        $categoryJSON= [];
+        foreach ($categories as $category) {
+            $categoryJSON [] = $apiFormatter->categoryToArray($category);
+        }
+        return new JsonResponse($categoryJSON);
+    }
+
+     // Devuelve todos los pedidos
+    #[Route('/orders', name: 'app_api_orders', methods:["GET"])]
+    public function ordersIndex(ApiFormatter $apiFormatter, OrderRepository $orderRepository): JsonResponse
+    {
+        $orders = $orderRepository->findAll();
+        $ordersJSON= [];
+        foreach ($orders as $order) {
+            $ordersJSON [] = $apiFormatter->orderToArray($order);
+        }
+        return new JsonResponse($ordersJSON);
+    }
+
+    // Devuelve un order
+    #[Route('/orders/{id}', name: 'app_api_order_show', methods:["GET"])]
+    public function orderById(ApiFormatter $apiFormatter, ProductsRepository $productsRepository, Order $order): JsonResponse
+    {
+        if($order){
+            $orderJSON = $apiFormatter->orderToArray($order);
+        }
+        return new JsonResponse($orderJSON);
     }
 
     // Modifica el user
@@ -151,3 +223,4 @@ class ApiController extends AbstractController
         return new JsonResponse($userJSON);
     }
 }
+

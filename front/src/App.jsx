@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout/Layout";
 import getData from "./helpers/getData";
 import getProducts from "./helpers/getProducts";
+import Products from "./pages/Products";
 import ProductInfo from "./pages/ProductInfo";
 import Error from "./pages/Error";
 import Main from "./pages/Main";
@@ -22,7 +23,7 @@ const App = () => {
       element: <Layout />,
       errorElement: <Error />,
       children: [
-        { index: true, element: <Main />, loader: getData },
+        { index: true, element: <Main />},
         {
           path: "/login",
           element: (
@@ -62,10 +63,20 @@ const App = () => {
         </PrivateRoute>,
         },
         {
-          path: "/:id",
-          element: <ProductInfo />,
-          loader: ({ params }) => getProducts(params.id),
+          path: "/products",
+          element: <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
+          <Products />
+          </PrivateRoute>,
+          loader: getData,
         },
+        {
+          path: "/products/:id",
+          loader: ({ params }) => getProducts(params.id),
+          element:<PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
+          <ProductInfo />
+          </PrivateRoute>,
+        },
+
       ],
     },
   ]);

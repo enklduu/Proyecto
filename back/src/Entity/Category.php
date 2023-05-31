@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -20,6 +21,9 @@ class Category
 
     #[ORM\ManyToMany(targetEntity: Products::class, mappedBy: 'categories')]
     private Collection $products;
+
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $visible = null;
 
     public function __construct()
     {
@@ -66,6 +70,18 @@ class Category
         if ($this->products->removeElement($product)) {
             $product->removeCategory($this);
         }
+
+        return $this;
+    }
+
+    public function getVisible(): ?int
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(int $visible): self
+    {
+        $this->visible = $visible;
 
         return $this;
     }

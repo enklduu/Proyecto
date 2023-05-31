@@ -32,15 +32,15 @@ class Products
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $reviews;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Goods::class, orphanRemoval: true)]
-    private Collection $goods;
-
+    
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderProduct::class, orphanRemoval: true)]
     private Collection $orderProducts;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $categories;
+
+    #[ORM\Column]
+    private ?int $stock = null;
 
     public function __construct()
     {
@@ -147,36 +147,6 @@ class Products
     }
 
     /**
-     * @return Collection<int, Goods>
-     */
-    public function getGoods(): Collection
-    {
-        return $this->goods;
-    }
-
-    public function addGood(Goods $good): self
-    {
-        if (!$this->goods->contains($good)) {
-            $this->goods->add($good);
-            $good->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGood(Goods $good): self
-    {
-        if ($this->goods->removeElement($good)) {
-            // set the owning side to null (unless already changed)
-            if ($good->getProduct() === $this) {
-                $good->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, OrderProduct>
      */
     public function getOrderProducts(): Collection
@@ -226,6 +196,18 @@ class Products
     public function removeCategory(Category $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getStock(): ?int
+    {
+        return $this->stock;
+    }
+
+    public function setStock(int $stock): self
+    {
+        $this->stock = $stock;
 
         return $this;
     }

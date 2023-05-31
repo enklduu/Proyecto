@@ -1,27 +1,24 @@
 import React, { useContext } from "react";
-import Container from "react-bootstrap/esm/Container";
-import Row from "react-bootstrap/esm/Row";
 import CookieConsent from "react-cookie-consent";
 import Modal from "../components/Modal";
-import Productos from "../components/Productos";
-import { Col } from "react-bootstrap";
-import { Link, useLoaderData } from "react-router-dom";
+import Pedidos from "../components/Pedidos";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import Index from "../components/Index";
 // import Searcher from "../components/Searcher";
 
 const Main = () => {
   const auth = useContext(AuthContext);
-  const data = useLoaderData();
-  // console.log(data);
-  // console.log(auth.user);
   return (
     <>
       {auth.user ? (
-        <></>
+        <>
+        </>
       ) : (
         <div className="text-center mt-3">
           Por favor, <Link to="/login">inicia sesión</Link> o{" "}
-          <Link to="/register">regístrate</Link> para acceder a todos los contenidos.
+          <Link to="/register">regístrate</Link> para acceder a todos los
+          contenidos.
         </div>
       )}
       <CookieConsent
@@ -54,15 +51,7 @@ const Main = () => {
         (auth.user.show_valoration || auth.user.show_valoration == null) && (
           <Modal />
         )}
-      <Container className="container-fluid">
-        <Row className="text-center">
-        </Row>
-        <Row>
-          <Col className="d-flex flex-wrap">
-            <Productos products={data} />
-          </Col>
-        </Row>
-      </Container>
+        {auth.user?.roles.includes("ROLE_ADMIN")? <><Pedidos></Pedidos></> : <><Index></Index>No estás registrado/eres user normal y ves la página principal</>}
     </>
   );
 };

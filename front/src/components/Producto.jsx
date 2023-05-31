@@ -23,7 +23,7 @@ const Producto = ({ product }) => {
     <Card style={{ width: "12rem" }} className="m-4 d-flex" key={product.id}>
       <Card.Body>
         <Card.Title>{product.title}</Card.Title>
-        <Link to={`/${product.id}`}>
+        <Link to={`/products/${product.id}`}>
           <Card.Img src={product.image} width={200} height={280} />
         </Link>
         <Card.Text className="">
