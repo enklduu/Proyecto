@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Service\ApiFormatter;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Entity\Products;
@@ -14,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
@@ -210,6 +211,40 @@ class ApiController extends AbstractController
 
         return new JsonResponse($userJSON);
     }    
+    // Modifica la imagen del user
+    #[Route('/upload-image', name: 'app_api_upload-image', methods:["POST"])]
+    public function image(ApiFormatter $apiFormatter, UserRepository $userRepository,Request $request): JsonResponse
+    {
+        $imageFile = $request->files->get('image');
+        $email = $request->request->get('email');
+
+        $user = $userRepository->findOneByEmail($email);
+
+        // Verificar si se ha enviado un archivo
+        if ($imageFile instanceof UploadedFile) {
+            $sourcePath = $imageFile->getPathname();
+            $filename = uniqid() . '.' . $imageFile->guessExtension() ;
+            $destinationPath = '../../front/src/images/' .$filename;
+            
+            // Copiar el archivo al directorio de front-end
+            if (copy($sourcePath, $destinationPath)) {
+                // Guardar en la base de datos
+                $user->setImg($filename);
+                $userRepository->save($user, true);
+                $userJSON = $apiFormatter->data($user);
+
+                // Devolver una respuesta adecuada
+                return new JsonResponse($userJSON);
+            } else {
+                // Devolver una respuesta de error si no se pudo copiar el archivo
+                return $this->json(['error' => 'No se pudo guardar la imagen.'], 500);
+            }
+        }
+        
+        // Devolver una respuesta de error si no se ha enviado un archivo
+        return $this->json(['error' => 'No se ha seleccionado ninguna imagen.'], 400);
+    }
+    
 
     // Devuelve un usuario por email
     #[Route('/{email}', name: 'app_api_users_show', methods:["GET"])]

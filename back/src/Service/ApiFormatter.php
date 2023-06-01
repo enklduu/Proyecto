@@ -45,7 +45,8 @@ class ApiFormatter
         'show_valoration' => $user->isShowValoration(),
         'roles' => $user->getRoles(),
         'orders' => $orders,
-        'reviews' => $reviews,  
+        'reviews' => $reviews,
+        'img' => $user->getImg(),  
     );
     return $userJSON;
     }
