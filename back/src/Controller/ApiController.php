@@ -224,7 +224,7 @@ class ApiController extends AbstractController
         if ($imageFile instanceof UploadedFile) {
             $sourcePath = $imageFile->getPathname();
             $filename = uniqid() . '.' . $imageFile->guessExtension() ;
-            $destinationPath = '../../front/src/images/' .$filename;
+            $destinationPath = '../../front/public/images/' .$filename;
             
             // Copiar el archivo al directorio de front-end
             if (copy($sourcePath, $destinationPath)) {

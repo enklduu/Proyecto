@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import userImage from "../images/user.png";
 
 const UserInfo = () => {
   const auth = useContext(AuthContext);
 
+  
   const renderStars = (valoration) => {
     const stars = [];
     for (let i = 0; i < valoration; i++) {
@@ -42,16 +42,27 @@ const UserInfo = () => {
             <div className="card text-center">
               <div className="card-body">
                 <h5 className="card-title">{auth.user.name}</h5>
-                <img
+                {/* <h1>{JSON.parse(localStorage.getItem("user")).img}</h1> */}
+                 <img
                   className="card-img-top"
                   src={
-                    auth.user.img
-                      ? require("../images/" + auth.user.img)
-                      : userImage
+                    JSON.parse(localStorage.getItem("user")).img != null
+                    ? "images/"+JSON.parse(localStorage.getItem("user")).img
+                    : "images/user.png"
                   }
                   alt="User"
                   style={{ width: "150px", height: "150px" }}
                 />
+                {/* <img
+                  className="card-img-top"
+                  src={
+                    JSON.parse(localStorage.getItem("user")).img != null
+                      ? require("../images/" + JSON.parse(localStorage.getItem("user")).img)
+                      : require("../images/user.png")
+                  }
+                  alt="User"
+                  style={{ width: "150px", height: "150px" }}
+                /> */}
                 <input
                   type="file"
                   accept="image/*"
