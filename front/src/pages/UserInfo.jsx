@@ -47,8 +47,8 @@ const UserInfo = () => {
                   className="card-img-top"
                   src={
                     JSON.parse(localStorage.getItem("user")).img != null
-                    ? "images/"+JSON.parse(localStorage.getItem("user")).img
-                    : "images/user.png"
+                    ? "images/users/"+JSON.parse(localStorage.getItem("user")).img
+                    : "images/users/user.png"
                   }
                   alt="User"
                   style={{ width: "150px", height: "150px" }}

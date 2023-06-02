@@ -14,6 +14,7 @@ class ApiFormatter
             $obj -> id = $order->getId();
             $obj -> total_price = $order->getTotal();
             $obj -> date = $order->getDate();
+            $obj -> status = $order->getStatus();
             foreach ($order->getOrderProducts() as $orderproduct) {
                 $obj2 = new \stdClass();
                 // $obj2 -> id = $orderproduct->getId();
@@ -83,6 +84,7 @@ class ApiFormatter
             // 'id' => $order->getId(),
             'total' => $order->getTotal(),
             'date' => $order->getDate(),
+            'status'=> $order->getStatus(),
             'orderProducts' => $orderProducts,
           );
           return $orderJSON;
@@ -92,12 +94,21 @@ class ApiFormatter
     public function productToArray($product): array
     {
         $reviews = [];
+        $categories = [];
         foreach ($product->getReviews() as $review) {
 
             $obj = new \stdClass();
             $obj -> text = $review->getText();
             $obj -> valoration = $review->getValoration();
             $reviews[]=($obj);
+        }
+        foreach ($product->getCategories() as $category) {
+
+            $obj = new \stdClass();
+            $obj -> id = $category->getId();
+            $obj -> name = $category->getName();
+            $obj -> visible = $category->getVisible();
+            $categories[]=($obj);
         }
         
         $productJSON= array(
@@ -109,6 +120,7 @@ class ApiFormatter
             'img' => $product->getImg(),
             'stock' => $product->getStock(),
             'reviews' => $reviews,
+            'categories' => $categories,
           );
           return $productJSON;
     }
