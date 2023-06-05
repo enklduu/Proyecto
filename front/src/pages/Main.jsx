@@ -5,7 +5,6 @@ import Pedidos from "../components/Pedidos";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Index from "../components/Index";
-// import Searcher from "../components/Searcher";
 
 const Main = () => {
   const auth = useContext(AuthContext);

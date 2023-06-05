@@ -107,6 +107,15 @@ class ApiController extends AbstractController
         }
         return new JsonResponse($productsJSON);
     }
+    // Devuelve un producto
+    #[Route('/products/{id}', name: 'app_api_product_show', methods:["GET"])]
+    public function productById(ApiFormatter $apiFormatter, ProductsRepository $productsRepository, Products $product): JsonResponse
+    {
+        if($product){
+            $productJSON = $apiFormatter->productToArray($product);
+        }
+        return new JsonResponse($productJSON);
+    }
     // // Devuelve los productos cuyas categorias se pasen como parámetro, se deben pasar separando con una coma y espacios a ambos lados
     // #[Route('/products/{categories}', name: 'app_api_products_show', methods:["GET"])]
     // public function productByCategories(ApiFormatter $apiFormatter, CategoryRepository $categoryRepository, ProductsRepository $productsRepository, Request $request): JsonResponse
@@ -169,6 +178,16 @@ class ApiController extends AbstractController
         if($order){
             $orderJSON = $apiFormatter->orderToArray($order);
         }
+        return new JsonResponse($orderJSON);
+    }
+    // Cambiar status del order y mandar correo
+    #[Route('/orders/{id}', name: 'app_api_order_edit', methods:["PUT"])]
+    public function editOrderById(ApiFormatter $apiFormatter, OrderRepository $orderRepository, Order $order, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $order->setStatus($data['status']);
+        $orderRepository->save($order, true);
+        $orderJSON = $apiFormatter->orderToArray($order);  
         return new JsonResponse($orderJSON);
     }
 

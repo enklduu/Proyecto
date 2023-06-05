@@ -1,7 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout/Layout";
-import getData from "./helpers/getData";
-import getProducts from "./helpers/getProducts";
+import getProduct from "./helpers/getProduct";
 import Products from "./pages/Products";
 import ProductInfo from "./pages/ProductInfo";
 import Error from "./pages/Error";
@@ -67,11 +66,10 @@ const App = () => {
           element: <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
           <Products />
           </PrivateRoute>,
-          loader: getData,
         },
         {
           path: "/products/:id",
-          loader: ({ params }) => getProducts(params.id),
+          loader: ({ params }) => getProduct(params.id),
           element:<PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
           <ProductInfo />
           </PrivateRoute>,

@@ -71,8 +71,7 @@ class ApiFormatter
 
         foreach ($order->getOrderProducts() as $orderproduct) {
             $obj = new \stdClass();
-            // $obj -> id = $orderproduct->getId();
-            $obj -> id_product = $orderproduct->getProduct()->getId();
+            $obj -> id = $orderproduct->getProduct()->getId();
             $obj -> name = $orderproduct->getProduct()->getName();
             $obj -> price = $orderproduct->getProduct()->getPrice();
             $obj -> img = $orderproduct->getProduct()->getImg();
@@ -81,10 +80,11 @@ class ApiFormatter
         }
 
         $orderJSON= array(
-            // 'id' => $order->getId(),
+            'id' => $order->getId(),
             'total' => $order->getTotal(),
             'date' => $order->getDate(),
             'status'=> $order->getStatus(),
+            'user' => $order->getUser()->getEmail(),
             'orderProducts' => $orderProducts,
           );
           return $orderJSON;

@@ -1,21 +1,17 @@
-import React from 'react'
+import React from 'react';
 import Productos from '../components/Productos';
-import { Col, Container, Row } from 'react-bootstrap';
-import { useLoaderData } from 'react-router-dom';
+import { Container, Row } from 'react-bootstrap';
 
 const Products = () => {
-  const data = useLoaderData();
   return (
     <Container className="container-fluid">
-        <Row className="text-center">
-        </Row>
-        <Row>
-          <Col className="d-flex flex-wrap">
-            <Productos products={data} />
-          </Col>
-        </Row>
-      </Container>
-  )
-}
+      <Row>
+        <div>
+          <Productos/>
+        </div>
+      </Row>
+    </Container>
+  );
+};
 
-export default Products
+export default Products;
