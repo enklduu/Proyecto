@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Producto from './Producto';
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -75,7 +74,7 @@ const Pedidos = () => {
                 <ul className="list-unstyled d-flex">
                   {pedido.orderProducts.map((product) => (
                     <li key={product.id}>
-                      <Producto product={product} />
+                      
                     </li>
                   ))}
                 </ul>

@@ -53,16 +53,6 @@ const UserInfo = () => {
                   alt="User"
                   style={{ width: "150px", height: "150px" }}
                 />
-                {/* <img
-                  className="card-img-top"
-                  src={
-                    JSON.parse(localStorage.getItem("user")).img != null
-                      ? require("../images/" + JSON.parse(localStorage.getItem("user")).img)
-                      : require("../images/user.png")
-                  }
-                  alt="User"
-                  style={{ width: "150px", height: "150px" }}
-                /> */}
                 <input
                   type="file"
                   accept="image/*"

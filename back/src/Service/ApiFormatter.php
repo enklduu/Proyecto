@@ -62,7 +62,19 @@ class ApiFormatter
           );
           return $categoryJSON;
     }
-
+    // Método para parsear las review
+    public function reviewToArray($review): array
+    {
+        $reviewJSON= array(
+            'id' => $review->getId(),
+            'user' => $review->getUser()->getEmail(),
+            'product' => $review->getProduct()->getName(),
+            'text' => $review->getText(),
+            'visible' => $review->getVisible(),
+            'valoration' => $review->getValoration(),
+            );
+        return $reviewJSON;
+    }
 
       // Método para parsear orders 
     public function orderToArray($order): array
@@ -124,13 +136,6 @@ class ApiFormatter
           );
           return $productJSON;
     }
+
     
-    // Función para los datos de la vista admin
-    // public function adminInArray($admindata): array
-    // {
-    //     $JSON= array(
-    //         'average_valoration' => $admindata['average'],
-    //       );
-    //       return $JSON;
-    // }
 }

@@ -116,36 +116,126 @@ class ApiController extends AbstractController
         }
         return new JsonResponse($productJSON);
     }
-    // // Devuelve los productos cuyas categorias se pasen como parámetro, se deben pasar separando con una coma y espacios a ambos lados
-    // #[Route('/products/{categories}', name: 'app_api_products_show', methods:["GET"])]
-    // public function productByCategories(ApiFormatter $apiFormatter, CategoryRepository $categoryRepository, ProductsRepository $productsRepository, Request $request): JsonResponse
-    // {
-    //     $categoriesString = $request->attributes->get('categories');
-    //     $categoryNames = explode(',', $categoriesString);
+    //Cambia la img del producto
+    #[Route('/products/{id}', name: 'app_api_product_img', methods:["POST"])]
+    public function imgProduct(ApiFormatter $apiFormatter, ProductsRepository $productsRepository, Products $product, Request $request): JsonResponse
+    {
+        $imageFile = $request->files->get('image');
+
+        // Verificar si se ha enviado un archivo
+        if ($imageFile instanceof UploadedFile) {
+            $sourcePath = $imageFile->getPathname();
+            $filename = uniqid() . '.' . $imageFile->guessExtension() ;
+            $destinationPath = '../../front/public/images/products/' .$filename;
+            
+            // Copiar el archivo al directorio de front-end
+            if (copy($sourcePath, $destinationPath)) {
+                // Guardar en la base de datos
+                $product->setImg($filename);
+                $productsRepository->save($product, true);
+                $productJSON = $apiFormatter->productToArray($product);
+
+                // Devolver una respuesta adecuada
+                return new JsonResponse($productJSON);
+            } else {
+                // Devolver una respuesta de error si no se pudo copiar el archivo
+                return $this->json(['error' => 'No se pudo guardar la imagen.'], 500);
+            }
+        }
         
-    //     $categories = [];
-    //     foreach ($categoryNames as $categoryName) {
-    //         $category = $categoryRepository->findOneByName($categoryName);
-    //         if ($category) {
-    //             $categories[] = $category;
-    //         }
-    //     }
+        // Devolver una respuesta de error si no se ha enviado un archivo
+        return $this->json(['error' => 'No se ha seleccionado ninguna imagen.'], 400);
+    }
+
+    // Cambiar datos del product
+    #[Route('/products/{id}', name: 'app_api_product_edit', methods:["PUT"])]
+    public function editProductById(ApiFormatter $apiFormatter,  ProductsRepository $productsRepository, CategoryRepository $categoryRepository, Products $product, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $product->setName($data['name']);
+        $product->setDescription($data['description']);
+        $product->setPrice($data['price']);
+        $product->setVisible($data['visible']);
+        $product->setStock($data['stock']);
+
+        // Eliminamos todas las categorías
+        foreach ($product->getCategories() as $category) {
+        $product->removeCategory($category);
+        }
+
+        // Agregamos las nuevas categorías al producto
+        foreach ($data['categories'] as $categoryData) {
+            $categoryId = $categoryData['id'];
+            $category = $categoryRepository->find($categoryId);
+            if ($category) {
+                $product->addCategory($category);
+            }
+        }
+
+        $productsRepository->save($product, true);
+        $productJSON = $apiFormatter->productToArray($product);  
+        return new JsonResponse($productJSON);
+    }
+
+
+    // Crear nuevo producto
+    #[Route('/new-product', name: 'app_api_new_product', methods:["POST"])]
+    public function newProduct(ApiFormatter $apiFormatter, ProductsRepository $productsRepository, CategoryRepository $categoryRepository ,Request $request, ManagerRegistry $doctrine): JsonResponse
+    { 
+        $entityManager=$doctrine->getManager();
+        $name = $request->request->get('name');
+        $description = $request->request->get('description');
+        $price = $request->request->get('price');
+        $visible = $request->request->get('visible');
+        $stock = $request->request->get('stock');
+        $categories = json_decode($request->request->get('categories'), true);
+        $imageFile = $request->files->get('img');
         
-    //     $products = [];
-    //     if (!empty($categories)) {
-    //         $products = $categories[0]->getProducts();
-    //         for ($i = 1; $i < count($categories); $i++) {
-    //             $products = array_intersect($products, $categories[$i]->getProducts());
-    //         }
-    //     }
+        // return new JsonResponse($categories);
+        // Verificar si se ha enviado un archivo
+        if ($imageFile instanceof UploadedFile) {
+            $sourcePath = $imageFile->getPathname();
+            $filename = uniqid() . '.' . $imageFile->guessExtension() ;
+            $destinationPath = '../../front/public/images/products/' .$filename;
+            
+            // Copiar el archivo al directorio de front-end
+            if (copy($sourcePath, $destinationPath)) {
+                // Guardar en la base de datos
+                $product = new Products();
+                $product->setImg($filename);
+                $product->setName($name);
+                $product->setDescription($description);
+                $product->setPrice($price);
+                $product->setVisible($visible);
+                $product->setStock($stock);
+    
+                // Agregamos las nuevas categorías al producto
+                foreach ($categories as $category) {
+                    $categoryId = $category['id'];
+                    $category = $categoryRepository->find($categoryId);
+                    if ($category) {
+                        $product->addCategory($category);
+                    }
+                }
+
+               // Guardar el nuevo usuario en la base de datos
+                  $entityManager->persist($product);
+                  $entityManager->flush();
         
-    //     $productsJSON = [];
-    //     foreach ($products as $product) {
-    //         $productsJSON[] = $apiFormatter->productToArray($product);
-    //     }
+                  // Devolver una respuesta al cliente React
+                  $productJSON = $apiFormatter->productToArray($product);
+
+                // Devolver una respuesta adecuada
+                return new JsonResponse($productJSON);
+            } else {
+                // Devolver una respuesta de error si no se pudo copiar el archivo
+                return $this->json(['error' => 'No se pudo guardar la imagen.'], 500);
+            }
+        }
         
-    //     return new JsonResponse($productsJSON);
-    // }
+      // Devolver una respuesta de error si no se ha enviado un archivo
+        return $this->json(['error' => 'No se ha seleccionado ninguna imagen.'], 400);
+    }
 
     // Devuelve todas las categorías
     #[Route('/category', name: 'app_api_categories', methods:["GET"])]
@@ -229,7 +319,7 @@ class ApiController extends AbstractController
         if ($imageFile instanceof UploadedFile) {
             $sourcePath = $imageFile->getPathname();
             $filename = uniqid() . '.' . $imageFile->guessExtension() ;
-            $destinationPath = '../../front/public/images/' .$filename;
+            $destinationPath = '../../front/public/images/users/' .$filename;
             
             // Copiar el archivo al directorio de front-end
             if (copy($sourcePath, $destinationPath)) {

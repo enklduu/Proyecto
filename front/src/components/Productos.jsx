@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Producto from "./Producto";
-import ProductForm from "./ProductForm";
+import NewProduct from "./NewProduct";
 
 const Productos = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingProduct, setEditingProduct] = useState(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [delatador, setDelatador] = useState(false);
+
+  const fetchProducts = async () => {
+    const response = await axios.get("http://127.0.0.1:8000/api/products");
+    setProducts(response.data);
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await axios.get("http://127.0.0.1:8000/api/products");
-      setProducts(response.data);
-    };
-    fetchProducts();
-
     const fetchCategories = async () => {
       const response = await axios.get("http://127.0.0.1:8000/api/category");
       setCategories(response.data);
     };
+    fetchProducts();
     fetchCategories();
   }, []);
 
@@ -37,15 +38,6 @@ const Productos = () => {
 
   const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
-  };
-
-  const handleAddToCart = (product) => {
-    // Lógica para añadir el producto al carrito
-    console.log('Producto añadido al carrito:', product);
-  };
-
-  const handleEditProduct = (product) => {
-    setEditingProduct(product);
   };
 
   const filteredProducts = products.filter((product) => {
@@ -65,11 +57,26 @@ const Productos = () => {
     return matchesCategory && matchesSearchTerm;
   });
 
+  const handleCreateProduct = () => {
+    setShowCreate(!showCreate);
+  };
+
+  // Hacemos el fetch de nuevo para que se recarge la info de la página pero sin generar bucles en el useEffect
+  if (delatador) {
+    fetchProducts();
+    setDelatador(!delatador);
+  }
   return (
-    <div>
-      {editingProduct && (
-        <ProductForm product={editingProduct} categories={categories} />
-      )}
+    <>
+      <button className="" onClick={() => handleCreateProduct()}>
+        Crear Producto
+      </button>
+      <NewProduct
+        show={showCreate}
+        setShow={setShowCreate}
+        categories={categories}
+        setDelatador={setDelatador}
+      />
       <div>
         <label>Filter by category:</label>
         <div className="form-group">
@@ -93,22 +100,24 @@ const Productos = () => {
 
       <div>
         <label>Search by name:</label>
-        <input type="text" value={searchTerm} onChange={handleSearchTermChange} />
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+        />
       </div>
-
       <ul className="list-unstyled d-flex">
         {filteredProducts.map((product) => (
           <li key={product.id}>
-            <Producto product={product} />
-            {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") ? (
-              <button className="m-4" onClick={() => handleEditProduct(product)}>Edit</button>
-            ) : (
-              <button className="m-4n" onClick={() => handleAddToCart(product)}>+</button>
-            )}
+            <Producto
+              product={product}
+              categories={categories}
+              setDelatador={setDelatador}
+            />
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 };
 

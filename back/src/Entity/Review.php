@@ -28,6 +28,9 @@ class Review
     #[ORM\JoinColumn(nullable: false)]
     private ?Products $product = null;
 
+    #[ORM\Column]
+    private ?bool $visible = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,18 @@ class Review
     public function setProduct(?Products $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function isVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(bool $visible): self
+    {
+        $this->visible = $visible;
 
         return $this;
     }

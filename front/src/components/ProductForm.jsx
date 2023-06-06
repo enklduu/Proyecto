@@ -3,10 +3,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
-const ProductForm = ({ product, categories }) => {
-  const navigate = useNavigate();
+
+const ProductForm = ({ product, categories, show, setShow, setDelatador}) => {
 
   // Define el esquema de validación con Yup
   const validationSchema = Yup.object().shape({
@@ -34,16 +33,18 @@ const ProductForm = ({ product, categories }) => {
         ...product,
         ...values,
       };
-      console.log(updatedProduct);
-      // Aquí puedes enviar los datos actualizados al servidor, por ejemplo, utilizando Axios
-      // axios
-      //   .post("/api/productos", updatedProduct)
-      //   .then((response) => {
-      //     navigate("/productos"); // Redirige a la página de productos después de enviar el formulario
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   });
+
+      axios
+        .put("http://127.0.0.1:8000/api/products/"+updatedProduct.id,  updatedProduct) 
+        .then((response) => {
+          setShow(false);
+          setDelatador(true);
+          // console.log(response);
+          // navigate("/admin");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   });
 
@@ -60,7 +61,9 @@ const ProductForm = ({ product, categories }) => {
   }, [product, formik.setValues]);
 
   return (
-    <Form onSubmit={formik.handleSubmit}>
+    <>
+    {show && <Form onSubmit={formik.handleSubmit}>
+      <h2>Editar</h2>
       <Form.Group controlId="name">
         <Form.Label>Nombre</Form.Label>
         <Form.Control
@@ -168,7 +171,8 @@ const ProductForm = ({ product, categories }) => {
       </Form.Group>
 
       <Button type="submit">Guardar</Button>
-    </Form>
+    </Form>}
+    </>
   );
 };
 
