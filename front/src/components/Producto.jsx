@@ -1,6 +1,5 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useContext, useState } from "react";
-import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
 import { ProductsContext } from "../contexts/ProductsContext";
 import ProductForm from "./ProductForm";
 
@@ -31,7 +30,7 @@ const Producto = ({ product, categories, setDelatador }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setDelatador(true);
       })
       .catch((error) => {
@@ -40,54 +39,61 @@ const Producto = ({ product, categories, setDelatador }) => {
   };
 
   return (
-    <>
-      <Card style={{ width: "12rem" }} className="m-4 d-flex" key={product.id}>
-        <Card.Body>
-          <Card.Title>{product.title}</Card.Title>
-          <Link to={`/products/${product.id}`}>
-            <Card.Img
-              src={"images/products/" + product.img}
-              width={200}
-              height={280}
-            />
-          </Link>
-          <Card.Text className="">
-            price: {product.price}{" "}
-            {JSON.parse(localStorage.getItem("user")).roles.includes(
-              "ROLE_ADMIN"
-            ) ? (
-              <>
-                <button className="" onClick={() => handleEditProduct(product)}>
-                  Edit
-                </button>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-              </>
-            ) : (
-              <button className="" onClick={() => handleAddToCart(product)}>
-                +
-              </button>
-            )}
-          </Card.Text>
-
-          {editingProduct &&
-            JSON.parse(localStorage.getItem("user")).roles.includes(
-              "ROLE_ADMIN"
-            ) && (
-              <ProductForm
-                product={editingProduct}
-                categories={categories}
-                show={showForm}
-                setShow={setShowForm}
-                setDelatador={setDelatador}
+    <div className="card m-auto" style={{ width: "18rem" }}>
+      <img
+        className="card-img-top img-fluid"
+        src={"../images/products/" + product.img}
+        alt="Product"
+        style={{ objectFit: "cover", height: "200px" }}
+      />
+      <div className="card-body">
+        <h5 className="card-title">{product.title}</h5>
+        <p className="card-text">{product.description}</p>
+      </div>
+      <div className="card-footer">
+        {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") ? (
+          <div>
+            <div className="file-input-container">
+              <input
+                type="file"
+                accept="image/*"
+                id="file-input"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
               />
-            )}
-        </Card.Body>
-      </Card>
-    </>
+              <label htmlFor="file-input" className="btn btn-primary">
+                Cambiar Imagen
+              </label>
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={() => handleEditProduct(product)}
+            >
+              Edit
+            </button>
+          </div>
+        ) : (
+          <div className="file-input-container">
+            <button
+              className="btn btn-primary"
+              onClick={() => handleAddToCart(product)}
+            >
+              +
+            </button>
+          </div>
+        )}
+        {editingProduct &&
+          JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") && (
+            <ProductForm
+              product={editingProduct}
+              categories={categories}
+              show={showForm}
+              setShow={setShowForm}
+              setDelatador={setDelatador}
+            />
+          )}
+      </div>
+    </div>
   );
 };
 

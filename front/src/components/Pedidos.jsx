@@ -34,9 +34,9 @@ const Pedidos = () => {
   };
 
   const cambiarEstado = async (pedidoId, email) => {
-    console.log(pedidoId);
+
     try {
-      const response = await fetch(
+      await fetch(
         `http://127.0.0.1:8000/api/orders/${pedidoId}`,
         {
           method: "PUT",
@@ -46,6 +46,7 @@ const Pedidos = () => {
           },
         }
       );
+
       // const data = await response.json();
       // console.log(data);
       // sendEmail(data.email);
@@ -58,9 +59,9 @@ const Pedidos = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container text-center">
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-6">
           <h2>Pedidos en proceso</h2>
           {pedidos.map((pedido) => (
             <div key={pedido.id} className="card mb-3">
@@ -88,7 +89,7 @@ const Pedidos = () => {
             </div>
           ))}
         </div>
-        <div className="col-md-4">
+        <div className="col-md-6">
           <h2>Pedidos finalizados</h2>
           {pedidosFinalizados.map((pedido) => (
             <div key={pedido.id} className="card mb-3">

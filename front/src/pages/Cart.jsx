@@ -1,10 +1,8 @@
-import React from 'react'
+import React from "react";
 import Carrito from "../components/Carrito";
 
 const Cart = () => {
-  return (
-    <Carrito></Carrito>
-  )
-}
+  return <Carrito></Carrito>;
+};
 
-export default Cart
+export default Cart;

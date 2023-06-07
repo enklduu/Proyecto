@@ -70,7 +70,7 @@ class ApiFormatter
             'user' => $review->getUser()->getEmail(),
             'product' => $review->getProduct()->getName(),
             'text' => $review->getText(),
-            'visible' => $review->getVisible(),
+            'visible' => $review->isVisible(),
             'valoration' => $review->getValoration(),
             );
         return $reviewJSON;
@@ -111,6 +111,8 @@ class ApiFormatter
 
             $obj = new \stdClass();
             $obj -> text = $review->getText();
+            $obj -> user = $review->getUser()->getId();
+            $obj -> userName = $review->getUser()->getName();
             $obj -> valoration = $review->getValoration();
             $reviews[]=($obj);
         }

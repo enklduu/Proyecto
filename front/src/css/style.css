@@ -1,80 +1,197 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  .modal-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    display:none;
-  }
-  
-  .modal-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: #fff;
-    height: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .estrellas {
-    direction: rtl;
-    unicode-bidi: bidi-override;
-    font-size: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .estrellas input[type="radio"] {
-    display: none;
-  }
-  
-  .estrellas label {
-    color: #aaa;
-    cursor: pointer;
-    margin: 0 2px;
-  }
-  
-  .estrellas label:hover,
-  .estrellas label:hover ~ label,
-  .estrellas input[type="radio"]:checked ~ label {
-    color: #ffca08;
-  }
-  
-  .input-group {
-    margin-bottom: 10px;
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-  }
-  .centered {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-  }
-  
-  .navbar-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 100%;
-  }
-  /* .navbar-with-bg {
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #fff;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.estrellas-mini {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.estrellas-mini input[type="radio"] {
+  display: none;
+}
+.estrellas-mini label {
+  color: #aaa;
+  cursor: pointer;
+  margin: 0 2px;
+}
+.estrellas-mini label:hover,
+.estrellas-mini label:hover ~ label,
+.estrellas-mini input[type="radio"]:checked ~ label {
+  color: #ffca08;
+}
+
+.estrellas {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  font-size: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+.estrellas input[type="radio"] {
+  display: none;
+}
+
+.estrellas label {
+  color: #aaa;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+.estrellas label:hover,
+.estrellas label:hover ~ label,
+.estrellas input[type="radio"]:checked ~ label {
+  color: #ffca08;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+}
+/* .navbar-with-bg {
     background-image: url('../images/2.jpg');
     background-size: cover;
     background-position: center;
   } */
-  
+.reviews-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+.reviews-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.review {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.current-user-review {
+  text-align: right;
+  background-color: #d0e8ff;
+}
+
+.review-content {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.review-user {
+  font-weight: bold;
+  font-size: 12px;
+  color: #555;
+}
+
+/* Formateo input type file */
+/*  */
+.file-input-container {
+  position: relative;
+  display: inline-block;
+}
+
+.file-input-container input[type="file"] {
+  display: none;
+}
+
+/* Formateao diseño del bootsrtap */
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 0;
+}
+
+.card-footer {
+  background-color: #f9f9f9;
+  padding: 10px 20px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.btn-primary {
+  color: #555;
+  background-color: #d0e8ff;
+  border-color: #d0e8ff;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+  color: rgb(255, 255, 255);
+}

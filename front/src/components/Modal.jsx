@@ -44,7 +44,7 @@ const Modal = () => {
 
         // Cambiar en el cliente
         auth.setUser(response.data);
-        localStorage.setItem("user",  JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data));
         setMostrarVentanaEmergente(false);
       } catch (error) {
         console.log(error);
@@ -63,11 +63,10 @@ const Modal = () => {
           "http://127.0.0.1:8000/api/valoration",
           { data: newUser }
         );
-        // console.log(response.data); // Respuesta del servidor
-
+        
         // Cambiar en el cliente
         auth.setUser(response.data);
-        localStorage.setItem("user",  JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data));
         setMostrarVentanaEmergente(false);
       } catch (error) {
         console.log(error);

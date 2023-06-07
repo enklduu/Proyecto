@@ -1,24 +1,24 @@
 import React, { useContext } from "react";
 import CookieConsent from "react-cookie-consent";
 import Modal from "../components/Modal";
-import Pedidos from "../components/Pedidos";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Index from "../components/Index";
-
 const Main = () => {
   const auth = useContext(AuthContext);
   return (
     <>
       {auth.user ? (
-        <>
-        </>
+        <></>
       ) : (
-        <div className="text-center mt-3">
-          Por favor, <Link to="/login">inicia sesión</Link> o{" "}
-          <Link to="/register">regístrate</Link> para acceder a todos los
-          contenidos.
-        </div>
+        <>
+          <Index></Index>
+          <div className="text-center mt-3">
+            Por favor, <Link to="/login">inicia sesión</Link> o{" "}
+            <Link to="/register">regístrate</Link> para acceder a todos los
+            contenidos.
+          </div>
+        </>
       )}
       <CookieConsent
         location="bottom"
@@ -33,8 +33,8 @@ const Main = () => {
           padding: "20px",
         }}
         buttonStyle={{
-          background: "#c84f60",
-          color: "#fff",
+          background: "#0069d9",
+          color: "white",
           fontSize: "14px",
           padding: "10px 20px",
           border: "none",
@@ -50,7 +50,6 @@ const Main = () => {
         (auth.user.show_valoration || auth.user.show_valoration == null) && (
           <Modal />
         )}
-        {auth.user?.roles.includes("ROLE_ADMIN")? <><Pedidos></Pedidos></> : <><Index></Index>No estás registrado/eres user normal y ves la página principal</>}
     </>
   );
 };

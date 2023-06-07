@@ -6,9 +6,12 @@ use App\Service\ApiFormatter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Entity\Products;
 use App\Entity\Order;
+use App\Entity\Review;
+use App\Entity\Category;
+use App\Repository\UserRepository;
+use App\Repository\ReviewRepository;
 use App\Repository\ProductsRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
@@ -95,6 +98,26 @@ class ApiController extends AbstractController
         $userJSON = $apiFormatter->data($user);
         return new JsonResponse($userJSON, 201);
     }
+
+     // Edita al usuario (cambia rol)
+     #[Route('/user/{id}', name: 'app_api_edit_user', methods:["PUT"])]
+     public function userEdit(ApiFormatter $apiFormatter, UserRepository $userRepository, User $user): JsonResponse
+     {
+        $roles = $user->getRoles();
+
+        if (in_array('ROLE_ADMIN', $roles)) {
+            // Si el usuario ya tiene el rol ROLE_ADMIN, lo eliminamos
+            $roles = array_diff($roles, ['ROLE_ADMIN']);
+        } else {
+            // Si el usuario no tiene el rol ROLE_ADMIN, lo añadimos
+            $roles[] = 'ROLE_ADMIN';
+        }
+    
+        $user->setRoles($roles);
+        $userRepository->save($user, true);
+        $userJSON = $apiFormatter->data($user);  
+        return new JsonResponse($userJSON);
+     }
 
     // Devuelve todos los productos
     #[Route('/products', name: 'app_api_products_index', methods:["GET"])]
@@ -340,7 +363,58 @@ class ApiController extends AbstractController
         return $this->json(['error' => 'No se ha seleccionado ninguna imagen.'], 400);
     }
     
+    // Devuelve todas las reviews
+    #[Route('/reviews', name: 'app_api_reviews', methods:["GET"])]
+    public function reviewsIndex(ApiFormatter $apiFormatter, ReviewRepository $reviewRepository): JsonResponse
+    {
+        $reviews = $reviewRepository->findAll();
+        $reviewJSON= [];
+        foreach ($reviews as $review) {
+            $reviewJSON [] = $apiFormatter->reviewToArray($review);
+        }
+        return new JsonResponse($reviewJSON);
+    }
+    
+    // Crear Review
+    #[Route('/createReview', name: 'app_api_create_review', methods:["POST"])]
+    public function createReview(ApiFormatter $apiFormatter, UserRepository $userRepository,ProductsRepository $productsRepository,ReviewRepository $reviewRepository,Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+            
+        $text = $request->request->get('text');
+        $valoration = $request->request->get('valoration');
+        $user = $userRepository->findOneById($request->request->get('user'));
+        $product = $productsRepository->findOneById($request->request->get('product'));
 
+        // Crear Review y añadir cositas
+        $review = new Review();
+        $review->setText($text);
+        $review->setValoration($valoration);
+        $review->setUser($user);
+        $review->setProduct($product);
+        $review->setVisible(1);
+
+        $reviewRepository->save($review, true);
+
+        $reviewJSON = $apiFormatter->reviewToArray($review);
+
+        return new JsonResponse($reviewJSON);
+    }  
+     // Edita la review (cambia rol)
+     #[Route('/reviews/{id}', name: 'app_api_edit_reviews', methods:["PUT"])]
+     public function reviewEdit(ApiFormatter $apiFormatter, ReviewRepository $reviewRepository, Review $review): JsonResponse
+     {
+        $visible = $review->isVisible();
+        if ($visible) {
+            $visible = 0;
+        } else {
+            $visible = 1;
+        }
+        $review->setVisible($visible);
+        $reviewRepository->save($review, true);
+        $reviewJSON = $apiFormatter->reviewToArray($review);  
+        return new JsonResponse($reviewJSON);
+     }
     // Devuelve un usuario por email
     #[Route('/{email}', name: 'app_api_users_show', methods:["GET"])]
     public function userByEmail(ApiFormatter $apiFormatter, UserRepository $userRepository, $email): JsonResponse
