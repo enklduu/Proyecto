@@ -3,7 +3,15 @@
   margin: 0;
   padding: 0;
 }
-
+body {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .modal-container {
   display: flex;
   justify-content: center;
@@ -17,10 +25,10 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: #fff;
+  background: #f5f5f5;
   height: 100%;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px #333;
 }
 
 .estrellas-mini {
@@ -116,7 +124,7 @@
 }
 
 .review {
-  background-color: #f9f9f9;
+  background-color: #aaa;
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
@@ -124,7 +132,7 @@
 
 .current-user-review {
   text-align: right;
-  background-color: #d0e8ff;
+  background-color: #fecccb;
 }
 
 .review-content {
@@ -135,7 +143,7 @@
 .review-user {
   font-weight: bold;
   font-size: 12px;
-  color: #555;
+  color: #333;
 }
 
 /* Formateo input type file */
@@ -152,7 +160,8 @@
 /* Formateao diseño del bootsrtap */
 
 .card {
-  border: 1px solid #ccc;
+  background: #f5f5f5;
+  border: 1px solid #333;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -173,25 +182,90 @@
 
 .card-text {
   font-size: 16px;
-  color: #555;
+  color: #333;
   margin-bottom: 0;
 }
 
 .card-footer {
-  background-color: #f9f9f9;
+  background-color: #333;
   padding: 10px 20px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
 
 .btn-primary {
-  color: #555;
-  background-color: #d0e8ff;
-  border-color: #d0e8ff;
+  color: #333;
+  background-color: #fecccb;
+  border-color: #fdb5b4;
 }
 
 .btn-primary:hover {
-  background-color: #0069d9;
-  border-color: #0062cc;
-  color: rgb(255, 255, 255);
+  background-color: #c84f60;
+  border-color: #c24556;
+  color: white;
+}
+
+/* Input checkbox raro */
+
+.checkbox-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.checkbox-item {
+  display: flex;
+  align-items: center; /* Centra verticalmente los elementos */
+}
+.check-box-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-checkbox {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.custom-checkbox .label {
+  font-size: 1.2em;
+  margin: 0 10px;
+}
+
+.custom-checkbox .checkmark {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #333;
+  display: inline-block;
+  border-radius: 3px;
+  background: #222
+    url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png)
+    center/1250% no-repeat;
+  transition: background-size 0.2s ease;
+}
+
+.custom-checkbox input:checked + .checkmark {
+  background-size: 60%;
+  transition: background-size 0.25s cubic-bezier(0.7, 0, 0.18, 1.24);
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.reset-padding {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.bg-image {
+  background-image: url("../../public/images/2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+}
+.footer {
+  margin-top: auto;
 }

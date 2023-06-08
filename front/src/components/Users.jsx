@@ -38,38 +38,42 @@ const Users = () => {
 
   return (
     <div className="container text-center">
-      <hr />
       <div className="row">
+        <hr />
         <div className="col-md-12">
           <h2 onClick={toggleUserList} style={{ cursor: "pointer" }}>
-            {showUsers ? "🔼Lista de usuarios🔼" : "🔽Lista de usuarios🔽"}
+            {showUsers ? "Lista de usuarios" : "Lista de usuarios"}
           </h2>
-          <hr />
-          {showUsers && (
-            <div>
-              {usuarios.map((user) => (
-                <div key={user.id} className="card mb-3">
-                  <div className="card-body">
-                    <p className="card-text">Nombre del usuario: {user.name}</p>
-                    <p className="card-text">Email: {user.email}</p>
+          {showUsers &&
+            (usuarios.length === 0 ? (
+              <p>No hay pedidos antiguos.</p>
+            ) : (
+              <div>
+                {usuarios.map((user) => (
+                  <div key={user.id} className="card mb-3">
+                    <div className="card-body">
+                      <p className="card-text">
+                        Nombre del usuario: {user.name}
+                      </p>
+                      <p className="card-text">Email: {user.email}</p>
+                    </div>
+                    {JSON.parse(localStorage.getItem("user")).email ===
+                    user.email ? (
+                      <></>
+                    ) : (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleClick(user)}
+                      >
+                        {user.roles.includes("ROLE_ADMIN")
+                          ? "¿Revocar Admin?"
+                          : "Hacer Admin"}
+                      </button>
+                    )}
                   </div>
-                  {JSON.parse(localStorage.getItem("user")).email ===
-                  user.email ? (
-                    <></>
-                  ) : (
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => handleClick(user)}
-                    >
-                      {user.roles.includes("ROLE_ADMIN")
-                        ? "¿Revocar Admin?"
-                        : "Hacer Admin"}
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            ))}
         </div>
       </div>
     </div>

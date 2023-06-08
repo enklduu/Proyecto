@@ -78,10 +78,13 @@ const ProductInfo = () => {
           <p className="card-text">{data.data.description}</p>
         </div>
         <div className="card-footer d-flex justify-content-between">
-          <button onClick={handleToggleReviewForm} className="btn btn-primary">
+          <button
+            onClick={handleToggleReviewForm}
+            className="btn btn-primary flex-grow-1 m-1"
+          >
             {showReviewForm ? "Cancelar" : "Añadir reseña"}
           </button>
-          <Link to={"/products"} className="btn btn-primary">
+          <Link to={"/products"} className="btn btn-primary flex-grow-1 m-1">
             Volver
           </Link>
         </div>

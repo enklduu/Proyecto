@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 const Footer = () => {
   return (
-    <section className="bg-dark text-white py-5">
+    <section className="bg-dark text-white py-5 footer">
       <div className="container">
         <div className="row">
           <div className="col-md-4 text-justify">

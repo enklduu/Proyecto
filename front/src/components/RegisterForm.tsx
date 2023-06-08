@@ -1,19 +1,12 @@
 import React from "react";
 import { useFormik } from "formik";
-import { CSSProperties } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 import * as Yup from "yup";
 import axios from "axios";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
-  const override: CSSProperties = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "#c84f60",
-  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Este campo es requerido"),
@@ -57,23 +50,13 @@ const RegisterForm = () => {
   });
 
   return (
-    <>
-      {formik.isSubmitting ? (
-        <div className="container mt-5 pt-3">
-          {" "}
-          <h1 className="text-center">Loading...</h1>
-          <div>
-            <ClipLoader
-              color={"#ffffff"}
-              cssOverride={override}
-              size={150}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div>
-        </div>
-      ) : (
-        <>
+    <div className="d-flex justify-content-center align-items-center bg-image">
+      <Card
+        className="container mt-5 mx-auto"
+        style={{ minWidth: "100px", maxWidth: "550px" }}
+      >
+        <Card.Body>
+          <h2 className="text-center mb-4">Registrarse</h2>
           <Form onSubmit={formik.handleSubmit}>
             <Form.Group controlId="name">
               <Form.Label>Nombre de usuario:</Form.Label>
@@ -138,21 +121,27 @@ const RegisterForm = () => {
                 }
               />
               <Form.Control.Feedback type="invalid">
-                {formik.errors.password}
+                {formik.errors.password2}
               </Form.Control.Feedback>
             </Form.Group>
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={formik.isSubmitting}
-            >
-              Registrarse
-            </Button>
+            <div className="d-flex justify-content-center">
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={formik.isSubmitting}
+                className="mt-3"
+              >
+                Registrarse
+              </Button>
+            </div>
           </Form>
-          ¿Ya tienes una cuenta? - <Link to={"/login"}>Logeate</Link>
-        </>
-      )}
-    </>
+          <div className="text-center mt-3">
+            ¿Ya tienes una cuenta? - <Link to={"/login"}>Iniciar sesión</Link>
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
+
 export default RegisterForm;

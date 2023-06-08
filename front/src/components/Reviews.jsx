@@ -43,31 +43,35 @@ const Reviews = () => {
 
   return (
     <div className="container text-center">
-      <hr />
       <div className="row">
+        <hr />
         <div className="col-md-12">
           <h2 onClick={toggleReviewList} style={{ cursor: "pointer" }}>
-            {showReviews ? "🔼Lista de reseñas🔼" : "🔽Lista de reseñas🔽"}
+            {showReviews ? "Lista de reseñas" : "Lista de reseñas"}
           </h2>
-          <hr />
-          {showReviews && (
-            <div>
-              {reviews.map((review) => (
-                <div key={review.id} className="card mb-3">
-                  <div className="card-body">
-                    <p className="card-text">Texto: {review.text}</p>
-                    <p className="card-text">Valoration: {review.valoration}</p>
+          {showReviews &&
+            (reviews.length === 0 ? (
+              <p>No hay pedidos antiguos.</p>
+            ) : (
+              <div>
+                {reviews.map((review) => (
+                  <div key={review.id} className="card mb-3">
+                    <div className="card-body">
+                      <p className="card-text">Texto: {review.text}</p>
+                      <p className="card-text">
+                        Valoration: {review.valoration}
+                      </p>
+                    </div>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleClick(review)}
+                    >
+                      {review.visible ? "Ocultar" : "Mostrar"}
+                    </button>
                   </div>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleClick(review)}
-                  >
-                    {review.visible ? "Ocultar" : "Mostrar"}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            ))}
         </div>
       </div>
     </div>

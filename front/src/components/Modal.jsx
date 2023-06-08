@@ -63,7 +63,7 @@ const Modal = () => {
           "http://127.0.0.1:8000/api/valoration",
           { data: newUser }
         );
-        
+
         // Cambiar en el cliente
         auth.setUser(response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
@@ -142,7 +142,7 @@ const Modal = () => {
               </label>
             </div>
             <div className="button-group">
-              <button>Enviar</button>
+              <button className="btn btn-primary">Enviar</button>
             </div>
           </form>
         </div>

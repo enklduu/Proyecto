@@ -54,6 +54,7 @@ const Productos = () => {
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
+    console.log(matchesCategory && matchesSearchTerm);
     return matchesCategory && matchesSearchTerm;
   });
 
@@ -66,56 +67,78 @@ const Productos = () => {
     fetchProducts();
     setDelatador(!delatador);
   }
+
   return (
     <>
-      <button className="" onClick={() => handleCreateProduct()}>
-        Crear Producto
-      </button>
-      <NewProduct
-        show={showCreate}
-        setShow={setShowCreate}
-        categories={categories}
-        setDelatador={setDelatador}
-      />
-      <div>
-        <label>Filter by category:</label>
-        <div className="form-group">
+      {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") ? (
+        <>
+          <button
+            className="btn btn-primary mb-3"
+            onClick={handleCreateProduct}
+          >
+            Crear Producto
+          </button>
+          <NewProduct
+            show={showCreate}
+            setShow={setShowCreate}
+            categories={categories}
+            setDelatador={setDelatador}
+          />{" "}
+        </>
+      ) : (
+        <></>
+      )}
+
+      <div className="mb-3">
+        <label className="form-label">
+          Selecciona las categorías que busques
+        </label>
+        <div className="checkbox-container">
           {categories.map((category) => (
-            <div key={category.id} className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value={category.id}
-                id={category.id}
-                onChange={handleCategoryChange}
-                checked={selectedCategories.includes(category.id.toString())}
-              />
-              <label className="form-check-label" htmlFor={category.id}>
-                {category.name}
+            <div key={category.id} className="checkbox-item">
+              <label
+                className="custom-checkbox"
+                tab-index="0"
+                aria-label="Another Label"
+              >
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value={category.id}
+                  id={category.id}
+                  onChange={handleCategoryChange}
+                  checked={selectedCategories.includes(category.id.toString())}
+                />
+                <span className="checkmark"></span>
+                <span className="label">{category.name}</span>
               </label>
             </div>
           ))}
         </div>
       </div>
 
-      <div>
-        <label>Search by name:</label>
+      <div className="mb-3">
         <input
           type="text"
+          className="form-control"
           value={searchTerm}
+          placeholder="Búsqueda por nombre"
           onChange={handleSearchTermChange}
         />
       </div>
-      <ul className="list-unstyled d-flex">
-        {filteredProducts.map((product) => (
-          <li key={product.id}>
-            <Producto
-              product={product}
-              categories={categories}
-              setDelatador={setDelatador}
-            />
-          </li>
-        ))}
+      <ul className="list-unstyled d-flex flex-wrap justify-content-around">
+        {filteredProducts.length > 0
+          ? filteredProducts.map((product) => (
+              <li key={product.id} className="mb-4">
+                <Producto
+                  product={product}
+                  categories={categories}
+                  set
+                  setDelatador={setDelatador}
+                />
+              </li>
+            ))
+          : "No hay productos con esas especificaciones"}
       </ul>
     </>
   );

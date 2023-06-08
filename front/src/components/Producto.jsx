@@ -2,6 +2,7 @@
 import React, { useContext, useState } from "react";
 import { ProductsContext } from "../contexts/ProductsContext";
 import ProductForm from "./ProductForm";
+import { Link } from "react-router-dom";
 
 const Producto = ({ product, categories, setDelatador }) => {
   const misProductos = useContext(ProductsContext);
@@ -24,7 +25,7 @@ const Producto = ({ product, categories, setDelatador }) => {
     const formData = new FormData();
     formData.append("image", file);
 
-    fetch("http://127.0.0.1:8000/api/products/"+product.id, {
+    fetch("http://127.0.0.1:8000/api/products/" + product.id, {
       method: "POST",
       body: formData,
     })
@@ -39,20 +40,27 @@ const Producto = ({ product, categories, setDelatador }) => {
   };
 
   return (
-    <div className="card m-auto" style={{ width: "18rem" }}>
-      <img
-        className="card-img-top img-fluid"
-        src={"../images/products/" + product.img}
-        alt="Product"
-        style={{ objectFit: "cover", height: "200px" }}
-      />
-      <div className="card-body">
+    <div
+      className="card m-auto container-fluid reset-padding"
+      style={{ width: "18rem" }}
+    >
+      <Link to={"/products/" + product.id}>
+        <img
+          className="card-img-top img-fluid"
+          src={"../images/products/" + product.img}
+          alt="Product"
+          style={{ objectFit: "cover", height: "200px" }}
+        />
+      </Link>
+      <div className="card-body border-top">
         <h5 className="card-title">{product.title}</h5>
         <p className="card-text">{product.description}</p>
       </div>
       <div className="card-footer">
-        {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") ? (
-          <div>
+        {JSON.parse(localStorage.getItem("user")).roles.includes(
+          "ROLE_ADMIN"
+        ) ? (
+          <div className=" d-flex">
             <div className="file-input-container">
               <input
                 type="file"
@@ -61,29 +69,35 @@ const Producto = ({ product, categories, setDelatador }) => {
                 onChange={handleImageUpload}
                 style={{ display: "none" }}
               />
-              <label htmlFor="file-input" className="btn btn-primary">
+              <label htmlFor="file-input" className="btn btn-primary m-1">
                 Cambiar Imagen
               </label>
             </div>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary flex-grow-1 m-1"
               onClick={() => handleEditProduct(product)}
             >
               Edit
             </button>
           </div>
         ) : (
-          <div className="file-input-container">
-            <button
-              className="btn btn-primary"
-              onClick={() => handleAddToCart(product)}
-            >
-              +
-            </button>
+          <div className="flex-grow-1">
+            <div className="file-input-container">
+              <button
+                className="btn btn-primary"
+                onClick={() => handleAddToCart(product)}
+              >
+                +
+              </button>
+            </div>
           </div>
         )}
-        {editingProduct &&
-          JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") && (
+      </div>
+      {editingProduct &&
+        JSON.parse(localStorage.getItem("user")).roles.includes(
+          "ROLE_ADMIN"
+        ) && (
+          <div className="">
             <ProductForm
               product={editingProduct}
               categories={categories}
@@ -91,8 +105,8 @@ const Producto = ({ product, categories, setDelatador }) => {
               setShow={setShowForm}
               setDelatador={setDelatador}
             />
-          )}
-      </div>
+          </div>
+        )}
     </div>
   );
 };

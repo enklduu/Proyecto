@@ -271,6 +271,22 @@ class ApiController extends AbstractController
         }
         return new JsonResponse($categoryJSON);
     }
+    
+    // Cambiar visible a las categorías
+    #[Route('/category/{id}', name: 'app_api_category_edit', methods:["PUT"])]
+    public function editCategoryById(ApiFormatter $apiFormatter, CategoryRepository $categoryRepository, Category $category): JsonResponse
+    {
+        $visible = $category->getVisible();
+        if ($visible) {
+            $visible = 0;
+        } else {
+            $visible = 1;
+        }
+        $category->setVisible($visible);
+        $categoryRepository->save($category, true);
+        $categoryJSON = $apiFormatter->categoryToArray($category);  
+        return new JsonResponse($categoryJSON);
+    }
 
      // Devuelve todos los pedidos 
     #[Route('/orders', name: 'app_api_orders', methods:["GET"])]
@@ -293,15 +309,17 @@ class ApiController extends AbstractController
         }
         return new JsonResponse($orderJSON);
     }
-    // Cambiar status del order y mandar correo
+    // Cambiar status del order y devuelve el objeto user
     #[Route('/orders/{id}', name: 'app_api_order_edit', methods:["PUT"])]
-    public function editOrderById(ApiFormatter $apiFormatter, OrderRepository $orderRepository, Order $order, Request $request): JsonResponse
+    public function editOrderById(ApiFormatter $apiFormatter, OrderRepository $orderRepository, Order $order,UserRepository $userRepository, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        $email = $data['email'];
         $order->setStatus($data['status']);
         $orderRepository->save($order, true);
-        $orderJSON = $apiFormatter->orderToArray($order);  
-        return new JsonResponse($orderJSON);
+        $user = $userRepository->findOneByEmail($email);
+        $userJSON = $apiFormatter->data($user);  
+        return new JsonResponse($userJSON);
     }
 
     // Modifica el user
