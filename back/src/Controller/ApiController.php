@@ -433,7 +433,16 @@ class ApiController extends AbstractController
         $reviewJSON = $apiFormatter->reviewToArray($review);  
         return new JsonResponse($reviewJSON);
      }
-    // Devuelve un usuario por email
+    
+    // Devuelve la valoración media de todos los usuarios en función a las votaciones
+    #[Route('/average', name: 'app_api_average', methods:["GET"])]
+    public function average(ApiFormatter $apiFormatter, UserRepository $userRepository): JsonResponse
+    {
+        $data = $userRepository->getAverageValoration();
+        return new JsonResponse($data);
+    }
+
+    // Devuelve la valoración media de todos los usuarios en función a las votaciones
     #[Route('/{email}', name: 'app_api_users_show', methods:["GET"])]
     public function userByEmail(ApiFormatter $apiFormatter, UserRepository $userRepository, $email): JsonResponse
     {
@@ -445,4 +454,3 @@ class ApiController extends AbstractController
         return new JsonResponse($userJSON);
     }
 }
-

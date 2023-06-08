@@ -1,6 +1,29 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const Footer = () => {
+  const [valoration, setValoration] = useState(null);
+
+  const renderStars = (valoration) => {
+    const stars = [];
+    for (let i = 0; i < valoration; i++) {
+      stars.push(<span key={i}>&#9733;</span>);
+    }
+    return stars;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/average");
+        setValoration(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <section className="bg-dark text-white py-5 footer">
       <div className="container">
@@ -44,6 +67,7 @@ const Footer = () => {
             <div>
               <p>13abrilfloristerias@gmail.com</p>
             </div>
+            <div>Valoración media : {renderStars(valoration)}</div>
           </div>
         </div>
       </div>
