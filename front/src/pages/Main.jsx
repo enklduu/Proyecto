@@ -1,11 +1,61 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CookieConsent from "react-cookie-consent";
 import Modal from "../components/Modal";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Index from "../components/Index";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Main = () => {
   const auth = useContext(AuthContext);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    const hasVisitedPage = localStorage.getItem("hasVisitedPage");
+    if (!hasVisitedPage) {
+      localStorage.setItem("hasVisitedPage", "true");
+      console.log("Ahora ya si la he visitado");
+    } else {
+      setModalVisible(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      auth.user &&
+      auth.user.roles.includes("ROLE_ADMIN") &&
+      auth.user.orders.some((order) => order.status === 1)
+    ) {
+      toast("Tienes pedidos que hacer", {
+        position: "top-right",
+        autoClose: 5000,
+        icon: "🌼",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } else if (
+      auth.user &&
+      auth.user.orders.some((order) => order.status === 2)
+    ) {
+      toast.warn("Tienes pedidos listos para recoger", {
+        position: "top-right",
+        autoClose: 5000,
+        icon: "📦",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  }, [auth.user]);
+
   return (
     <>
       {auth.user ? (
@@ -45,11 +95,24 @@ const Main = () => {
         Esta página usa cookies para asegurarse de que tienes la mejor de las
         experiencias.
       </CookieConsent>
-      {auth.user &&
+      {modalVisible &&
+        auth.user &&
         auth.user.valoration == null &&
         (auth.user.show_valoration || auth.user.show_valoration == null) && (
           <Modal />
         )}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </>
   );
 };

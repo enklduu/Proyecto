@@ -110,6 +110,7 @@ class ApiFormatter
         foreach ($product->getReviews() as $review) {
 
             $obj = new \stdClass();
+            $obj -> visible = $review->isVisible();
             $obj -> text = $review->getText();
             $obj -> user = $review->getUser()->getId();
             $obj -> userName = $review->getUser()->getName();

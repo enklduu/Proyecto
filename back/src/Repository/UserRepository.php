@@ -60,23 +60,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         $users = $this->findAll();
         $valoraciones = [];
-
+    
         foreach ($users as $user) {
             $valoracion = $user->getValoration();
             if ($valoracion !== null) {
                 $valoraciones[] = $valoracion;
             }
         }
-
-        $valoracionesNumericas = array_filter($valoraciones, function($valoracion) {
+    
+        if (count($valoraciones) === 0) {
+            return 0;
+        }
+    
+        $valoracionesNumericas = array_filter($valoraciones, function ($valoracion) {
             return $valoracion !== null;
         });
-
+    
         $valoracionMedia = array_sum($valoracionesNumericas) / count($valoracionesNumericas);
         $valoracionMedia = round($valoracionMedia, 2);
-
+    
         return $valoracionMedia;
     }
+    
 
 //    /**
 //     * @return User[] Returns an array of User objects

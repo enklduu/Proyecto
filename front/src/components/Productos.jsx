@@ -67,7 +67,6 @@ const Productos = () => {
     fetchProducts();
     setDelatador(!delatador);
   }
-
   return (
     <>
       {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") ? (
@@ -94,26 +93,62 @@ const Productos = () => {
           Selecciona las categorías que busques
         </label>
         <div className="checkbox-container">
-          {categories.map((category) => (
-            <div key={category.id} className="checkbox-item">
-              <label
-                className="custom-checkbox"
-                tab-index="0"
-                aria-label="Another Label"
-              >
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value={category.id}
-                  id={category.id}
-                  onChange={handleCategoryChange}
-                  checked={selectedCategories.includes(category.id.toString())}
-                />
-                <span className="checkmark"></span>
-                <span className="label">{category.name}</span>
-              </label>
-            </div>
-          ))}
+          {categories.length === 0 ||
+          categories.every((category) => category.visible === 0) ? (
+            <p className="text-center">No hay categorías disponibles aún.</p>
+          ) : (
+            <>
+              {JSON.parse(localStorage.getItem("user")).roles.includes(
+                "ROLE_ADMIN"
+              )
+                ? categories.map((category) => (
+                    <div key={category.id} className="checkbox-item">
+                      <label
+                        className="custom-checkbox"
+                        tab-index="0"
+                        aria-label="Another Label"
+                      >
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value={category.id}
+                          id={category.id}
+                          onChange={handleCategoryChange}
+                          checked={selectedCategories.includes(
+                            category.id.toString()
+                          )}
+                        />
+                        <span className="checkmark"></span>
+                        <span className="label">{category.name}</span>
+                      </label>
+                    </div>
+                  ))
+                : categories
+                    .filter((category) => category.visible !== 0)
+                    .map((category) => (
+                      <div key={category.id} className="checkbox-item">
+                        <label
+                          className="custom-checkbox"
+                          tab-index="0"
+                          aria-label="Another Label"
+                        >
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value={category.id}
+                            id={category.id}
+                            onChange={handleCategoryChange}
+                            checked={selectedCategories.includes(
+                              category.id.toString()
+                            )}
+                          />
+                          <span className="checkmark"></span>
+                          <span className="label">{category.name}</span>
+                        </label>
+                      </div>
+                    ))}
+            </>
+          )}
         </div>
       </div>
 
@@ -126,19 +161,38 @@ const Productos = () => {
           onChange={handleSearchTermChange}
         />
       </div>
+
       <ul className="list-unstyled d-flex flex-wrap justify-content-around">
-        {filteredProducts.length > 0
-          ? filteredProducts.map((product) => (
-              <li key={product.id} className="mb-4">
-                <Producto
-                  product={product}
-                  categories={categories}
-                  set
-                  setDelatador={setDelatador}
-                />
-              </li>
-            ))
-          : "No hay productos con esas especificaciones"}
+        {filteredProducts.length === 0 ||
+        filteredProducts.every((product) => product.visible === false) ? (
+          <p className="text-center">No hay productos disponibles aún.</p>
+        ) : (
+          <>
+            {JSON.parse(localStorage.getItem("user")).roles.includes(
+              "ROLE_ADMIN"
+            )
+              ? filteredProducts.map((product) => (
+                  <li key={product.id} className="mb-4">
+                    <Producto
+                      product={product}
+                      categories={categories}
+                      setDelatador={setDelatador}
+                    />
+                  </li>
+                ))
+              : filteredProducts
+                  .filter((product) => product.visible !== false)
+                  .map((product) => (
+                    <li key={product.id} className="mb-4">
+                      <Producto
+                        product={product}
+                        categories={categories}
+                        setDelatador={setDelatador}
+                      />
+                    </li>
+                  ))}
+          </>
+        )}
       </ul>
     </>
   );

@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("hasVisitedPage");
     setUser(null);
     <Navigate to="/" replace={true} />;
   };

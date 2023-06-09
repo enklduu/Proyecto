@@ -64,7 +64,6 @@ const ProductInfo = () => {
     setStarsSelected(0);
     setShowReviewForm(false);
   };
-
   return (
     <div className="container mt-3">
       <div className="card m-auto" style={{ maxWidth: "30rem" }}>
@@ -173,22 +172,25 @@ const ProductInfo = () => {
             {renderStars(newReview.valoration)}
           </li>
         )}
-        {data.data.reviews.length === 0 ? (
+        {data.data.reviews.length === 0 ||
+        data.data.reviews.every((review) => review.visible === false) ? (
           <p className="text-center">No hay reseñas aún.</p>
         ) : (
           <ul className="reviews-list">
-            {data.data.reviews.map((review, index) => (
-              <li
-                key={index}
-                className={`review ${
-                  review.user === currentUser ? "current-user-review" : ""
-                }`}
-              >
-                <p>{review.userName}</p>
-                <div>{review.text}</div>
-                {renderStars(review.valoration)}
-              </li>
-            ))}
+            {data.data.reviews
+              .filter((review) => review.visible !== false)
+              .map((review, index) => (
+                <li
+                  key={index}
+                  className={`review ${
+                    review.user === currentUser ? "current-user-review" : ""
+                  }`}
+                >
+                  <p>{review.userName}</p>
+                  <div>{review.text}</div>
+                  {renderStars(review.valoration)}
+                </li>
+              ))}
           </ul>
         )}
       </div>

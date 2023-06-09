@@ -82,7 +82,7 @@ const Modal = () => {
           <form onSubmit={handleFormSubmit}>
             <div className="input-group">
               <label>
-                <div className="estrellas">
+                <div className="estrellas-mini">
                   <input
                     type="radio"
                     id="estrella5"

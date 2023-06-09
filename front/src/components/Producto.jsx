@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useContext, useState } from "react";
 import { ProductsContext } from "../contexts/ProductsContext";
 import ProductForm from "./ProductForm";
 import { Link } from "react-router-dom";
+import { FaEyeSlash, FaCartPlus } from "react-icons/fa";
 
 const Producto = ({ product, categories, setDelatador }) => {
   const misProductos = useContext(ProductsContext);
@@ -42,7 +42,7 @@ const Producto = ({ product, categories, setDelatador }) => {
   return (
     <div
       className="card m-auto container-fluid reset-padding"
-      style={{ width: "18rem" }}
+      style={{ width: "18rem", minHeight: "380px" }}
     >
       <Link to={"/products/" + product.id}>
         <img
@@ -52,15 +52,27 @@ const Producto = ({ product, categories, setDelatador }) => {
           style={{ objectFit: "cover", height: "200px" }}
         />
       </Link>
-      <div className="card-body border-top">
+      <div className="card-body border-top d-flex flex-column text-center">
         <h5 className="card-title">{product.title}</h5>
         <p className="card-text">{product.description}</p>
+        <div className="d-flex justify-content-center">
+          {!product.visible && (
+            <div className="icon-container">
+              <FaEyeSlash />
+            </div>
+          )}
+          {product.stock === 0 && (
+            <div className="icon-container">
+              <FaCartPlus />
+            </div>
+          )}
+        </div>
       </div>
       <div className="card-footer">
         {JSON.parse(localStorage.getItem("user")).roles.includes(
           "ROLE_ADMIN"
         ) ? (
-          <div className=" d-flex">
+          <div className="d-flex">
             <div className="file-input-container">
               <input
                 type="file"
@@ -82,14 +94,18 @@ const Producto = ({ product, categories, setDelatador }) => {
           </div>
         ) : (
           <div className="flex-grow-1">
-            <div className="file-input-container">
+            {product.stock === 0 ? (
+              <button className="btn btn-primary" disabled>
+                Agotado
+              </button>
+            ) : (
               <button
                 className="btn btn-primary"
                 onClick={() => handleAddToCart(product)}
               >
-                +
+                Añadir al carrito
               </button>
-            </div>
+            )}
           </div>
         )}
       </div>
