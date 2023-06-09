@@ -27,14 +27,11 @@ const Header = () => {
             )}
             {user != null && (
               <>
-                <Nav.Link as={Link} to="/user">
-                  Tu perfil
-                </Nav.Link>
-                <Nav.Link as={Link} to="/cart">
-                  Carrito
-                </Nav.Link>
                 <Nav.Link as={Link} to="/products">
                   Tienda
+                </Nav.Link>
+                <Nav.Link as={Link} to="/user">
+                  Tu perfil
                 </Nav.Link>
                 {user.roles.includes("ROLE_ADMIN") && (
                   <Nav.Link as={Link} to="/admin">

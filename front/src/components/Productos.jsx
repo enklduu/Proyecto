@@ -85,14 +85,20 @@ const Productos = () => {
           />{" "}
         </>
       ) : (
-        <></>
+        <>
+          {/* <button className="btn btn-primary mb-3" onClick={handleCart}>
+            Tu Carro
+          </button>
+          <ModalCart />
+          /> */}
+        </>
       )}
 
       <div className="mb-3">
-        <label className="form-label">
+        <h4 className="form-label text-center w-100">
           Selecciona las categorías que busques
-        </label>
-        <div className="checkbox-container">
+        </h4>
+        <div className="checkbox-container justify-content-center">
           {categories.length === 0 ||
           categories.every((category) => category.visible === 0) ? (
             <p className="text-center">No hay categorías disponibles aún.</p>
@@ -165,7 +171,7 @@ const Productos = () => {
       <ul className="list-unstyled d-flex flex-wrap justify-content-around">
         {filteredProducts.length === 0 ||
         filteredProducts.every((product) => product.visible === false) ? (
-          <p className="text-center">No hay productos disponibles aún.</p>
+          <p className="text-center">No se encuentran productos.</p>
         ) : (
           <>
             {JSON.parse(localStorage.getItem("user")).roles.includes(

@@ -10,7 +10,6 @@ import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import UserInfo from "./pages/UserInfo";
 import PrivateRoute from "./components/PrivateRoute";
-import Cart from "./pages/Cart";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 
@@ -44,14 +43,6 @@ const App = () => {
           element: (
             <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
               <UserInfo />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/cart",
-          element: (
-            <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
-              <Cart/>
             </PrivateRoute>
           ),
         },
