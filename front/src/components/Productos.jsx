@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Producto from "./Producto";
 import NewProduct from "./NewProduct";
+import ReactModal from "react-modal";
+import { CartContext } from "../contexts/CartContext";
 
 const Productos = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -11,18 +13,34 @@ const Productos = () => {
   const [showCreate, setShowCreate] = useState(false);
   const [delatador, setDelatador] = useState(false);
 
+  const [showCart, setShowCart] = useState(false);
+
+  const cart = useContext(CartContext);
+
   const fetchProducts = async () => {
     const response = await axios.get("http://127.0.0.1:8000/api/products");
     setProducts(response.data);
   };
 
   useEffect(() => {
+    const fetchCartItems = async () => {
+      const userEmail = JSON.parse(localStorage.getItem("user")).email;
+      const response = await axios.get("http://127.0.0.1:8000/api/orders");
+      const items = response.data.filter(
+        (item) => item.status === 0 && item.user === userEmail
+      );
+      // console.log(items[0]);
+      cart.setCartItems(items[0].orderProducts);
+    };
+
     const fetchCategories = async () => {
       const response = await axios.get("http://127.0.0.1:8000/api/category");
       setCategories(response.data);
     };
+
     fetchProducts();
     fetchCategories();
+    fetchCartItems();
   }, []);
 
   const handleCategoryChange = (event) => {
@@ -54,19 +72,22 @@ const Productos = () => {
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
-    console.log(matchesCategory && matchesSearchTerm);
+    // console.log(matchesCategory && matchesSearchTerm);
     return matchesCategory && matchesSearchTerm;
   });
 
   const handleCreateProduct = () => {
     setShowCreate(!showCreate);
   };
-
+  const handleCart = () => {
+    setShowCart(!showCart);
+  };
   // Hacemos el fetch de nuevo para que se recarge la info de la página pero sin generar bucles en el useEffect
   if (delatador) {
     fetchProducts();
     setDelatador(!delatador);
   }
+
   return (
     <>
       {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") ? (
@@ -86,11 +107,24 @@ const Productos = () => {
         </>
       ) : (
         <>
-          {/* <button className="btn btn-primary mb-3" onClick={handleCart}>
-            Tu Carro
+          <button className="btn btn-primary mb-3" onClick={handleCart}>
+            Tu Carro {cart.cartItems.length}
           </button>
-          <ModalCart />
-          /> */}
+          <ReactModal isOpen={showCart} ariaHideApp={false}>
+            <div className="modal-content">
+              <h3>Tu Carro</h3>
+              <ul className="">
+                {cart.cartItems.map((product) => (
+                  <li key={product.id}>
+                    {product.name} - {product.amount}
+                  </li>
+                ))}
+              </ul>
+              <button className="btn btn-primary" onClick={handleCart}>
+                Cerrar
+              </button>
+            </div>
+          </ReactModal>
         </>
       )}
 

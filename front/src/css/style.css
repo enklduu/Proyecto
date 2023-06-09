@@ -172,6 +172,11 @@ body {
   background-color: #fecccb;
   border-color: #fdb5b4;
 }
+.btn:disabled {
+  background-color: #fecccb;
+  border-color: #fdb5b4;
+  color: #333;
+}
 
 .btn-primary:hover {
   background-color: #c84f60;

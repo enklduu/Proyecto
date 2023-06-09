@@ -34,6 +34,7 @@ class ApiFormatter
             $obj = new \stdClass();
             $obj -> text = $review->getText();
             $obj -> valoration = $review->getValoration();
+            $obj -> visible = $review->isVisible();
             $reviews[]=($obj);
         }
 

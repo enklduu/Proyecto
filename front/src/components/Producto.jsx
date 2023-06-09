@@ -1,22 +1,42 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import ProductForm from "./ProductForm";
 import { Link } from "react-router-dom";
 import { FaEyeSlash, FaCartPlus } from "react-icons/fa";
+import { CartContext } from "../contexts/CartContext";
 
 const Producto = ({ product, categories, setDelatador }) => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
+  const cart = useContext(CartContext);
+
   const handleAddToCart = (product) => {
     // Lógica para añadir el producto al carrito
-    // misProductos.setProductos(product);
-    // console.log("Producto añadido al carrito:", product);
+    if (getProductAmountInCart(product.id) < product.stock) {
+      cart.addToCart(product);
+    } else {
+      alert(
+        "Lamentablemente en este momento no disponemos tanto de este producto"
+      );
+    }
+  };
+  const handleRemoveFromCart = (product) => {
+    // Lógica para añadir el producto al carrito
+    if (product.amount !== 0) {
+      cart.removeFromCart(product.id);
+    }
   };
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
     setShowForm(!showForm);
+  };
+  const getProductAmountInCart = (productId) => {
+    const productInCart = cart.cartItems.find(
+      (product) => product.id === productId
+    );
+    return productInCart ? productInCart.amount : 0;
   };
 
   const handleImageUpload = (event) => {
@@ -42,7 +62,7 @@ const Producto = ({ product, categories, setDelatador }) => {
     <>
       <div
         className="card m-auto container-fluid reset-padding"
-        style={{ width: "18rem", minHeight: "380px", maxHeight: "100%" }}
+        style={{ width: "18rem", minHeight: "400px", maxHeight: "100%" }}
       >
         <Link to={"/products/" + product.id}>
           <img
@@ -53,8 +73,15 @@ const Producto = ({ product, categories, setDelatador }) => {
           />
         </Link>
         <div className="card-body border-top d-flex flex-column text-center">
-          <h5 className="card-title">{product.title}</h5>
-          <p className="card-text">{product.description}</p>
+          <h5 className="card-title">{product.name}</h5>
+          {/* <p className="card-text">{product.description}</p> */}
+          <p className="card-text">{"Precio -> " + product.price + "€"}</p>
+          <p className="card-text">
+            {"En el carrito -> " +
+              getProductAmountInCart(product.id) +
+              " Stock -> " +
+              product.stock}
+          </p>
           <div className="d-flex justify-content-center">
             {!product.visible && (
               <div className="icon-container">
@@ -93,20 +120,28 @@ const Producto = ({ product, categories, setDelatador }) => {
               </button>
             </div>
           ) : (
-            <div className="flex-grow-1">
-              {product.stock === 0 ? (
-                <button className="btn btn-primary" disabled>
-                  Agotado
-                </button>
-              ) : (
+            <>
+              <div className="d-flex">
+                {product.stock === 0 ? (
+                  <button className="btn btn-primary flex-grow-1 m-1" disabled>
+                    Agotado
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary flex-grow-1 m-1"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Añadir
+                  </button>
+                )}
                 <button
-                  className="btn btn-primary"
-                  onClick={() => handleAddToCart(product)}
+                  className="btn btn-primary flex-grow-1 m-1 "
+                  onClick={() => handleRemoveFromCart(product)}
                 >
-                  Añadir al carrito
+                  Quitar
                 </button>
-              )}
-            </div>
+              </div>
+            </>
           )}
         </div>
       </div>

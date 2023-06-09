@@ -94,24 +94,32 @@ const UserInfo = () => {
           {auth.user.reviews.length !== 0 && (
             <div className="text-center container">
               <h2>Mis reseñas</h2>
-              {auth.user.reviews.map((review, index) => (
-                <div key={index}>
-                  {/* Aquí renderizamos los detalles de cada reseña */}
-                  <div key={review.id} className="card mb-3">
-                    <div className="card-body">
-                      <p className="card-text">
-                        <b>{review.user}</b>
-                      </p>
-                      <p className="card-text">
-                        <b>{review.text}</b>
-                      </p>
-                      <p className="card-text">
-                        {renderStars(review.valoration)}
-                      </p>
+
+              {auth.user.reviews.length === 0 ||
+              auth.user.reviews.every((review) => review.visible === false) ? (
+                <p className="text-center">No hay reseñas aún.</p>
+              ) : (
+                auth.user.reviews
+                  .filter((review) => review.visible !== false)
+                  .map((review, index) => (
+                    <div key={index}>
+                      {/* Aquí renderizamos los detalles de cada reseña */}
+                      <div key={review.id} className="card mb-3">
+                        <div className="card-body">
+                          <p className="card-text">
+                            <b>{review.user}</b>
+                          </p>
+                          <p className="card-text">
+                            <b>{review.text}</b>
+                          </p>
+                          <p className="card-text">
+                            {renderStars(review.valoration)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  ))
+              )}
             </div>
           )}
 
