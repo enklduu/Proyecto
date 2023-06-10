@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -37,14 +39,36 @@ const RegisterForm = () => {
         .post("http://127.0.0.1:8000/api/register", values)
         .then((response) => {
           // console.log(response);
-          alert("Cuenta registrada");
-          navigate("/login");
+          toast.success("Cuenta registrada", {
+            position: "top-right",
+            autoClose: 2500,
+            icon: "👍",
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setTimeout(() => {
+            navigate("/login");
+          }, 5000);
         })
         .catch((error) => {
           formik.setSubmitting(false);
           // console.log(error);
           formik.resetForm();
-          alert(error.response.data);
+          toast.error("Algo salió mal", {
+            position: "top-right",
+            autoClose: 5000,
+            icon: "😟",
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
         });
     },
   });
@@ -140,6 +164,18 @@ const RegisterForm = () => {
           </div>
         </Card.Body>
       </Card>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </div>
   );
 };

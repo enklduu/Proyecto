@@ -15,6 +15,8 @@ class ApiFormatter
             $obj->total_price = $order->getTotal();
             $obj->date = $order->getDate();
             $obj->status = $order->getStatus();
+
+            $orders_product = [];
             foreach ($order->getOrderProducts() as $orderproduct) {
                 $obj2 = new \stdClass();
                 // $obj2 -> id = $orderproduct->getId();
@@ -73,6 +75,7 @@ class ApiFormatter
             'text' => $review->getText(),
             'visible' => $review->isVisible(),
             'valoration' => $review->getValoration(),
+            'username' => $review->getUser()->getName(),
         );
         return $reviewJSON;
     }

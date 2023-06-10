@@ -17,8 +17,7 @@ const Main = () => {
       const response = await fetch("http://127.0.0.1:8000/api/orders");
       const data = await response.json();
 
-      const ordersToDo = data.filter((order) => order.status === 1);
-      setPedidos(ordersToDo);
+      setPedidos(data);
     } catch (error) {
       console.log(error);
     }
@@ -45,25 +44,6 @@ const Main = () => {
       });
     }
 
-    if (
-      JSON.parse(localStorage.getItem("user")) &&
-      JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") &&
-      pedidos.length > 0
-    ) {
-      console.log("Hola");
-      toast.info("Tienes pedidos que hacer", {
-        position: "top-right",
-        autoClose: 5000,
-        icon: "🌼",
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
-
     const hasVisitedPage = localStorage.getItem("hasVisitedPage");
     if (!hasVisitedPage) {
       localStorage.setItem("hasVisitedPage", "true");
@@ -72,9 +52,30 @@ const Main = () => {
       setModalVisible(true);
     }
     fetchPedidos();
+    console.log(pedidos);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(pedidos);
+  if (
+    JSON.parse(localStorage.getItem("user")) &&
+    JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") &&
+    pedidos.some((order) => order.status === 1)
+  ) {
+    console.log("Hola");
+    toast.info("Tienes pedidos que hacer", {
+      position: "top-right",
+      autoClose: 5000,
+      icon: "🌼",
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+
   return (
     <>
       {auth.user ? (

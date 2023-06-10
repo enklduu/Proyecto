@@ -18,7 +18,7 @@ const Producto = ({ product, categories, setDelatador }) => {
     if (getProductAmountInCart(product.id) < product.stock) {
       cart.addToCart(product);
     } else {
-      toast.warn("No puedes añadir más", {
+      toast.error("No puedes añadir más", {
         position: "top-right",
         autoClose: 5000,
         icon: "😡",

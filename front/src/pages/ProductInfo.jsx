@@ -52,6 +52,7 @@ const ProductInfo = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setNewReview(data);
       })
       .catch((error) => {
@@ -166,14 +167,20 @@ const ProductInfo = () => {
       <h2 className="text-center mt-3">Reseñas</h2>
       <div className="reviews-container">
         {newReview && (
-          <li className="review current-user-review">
-            <p>{newReview.userName}</p>
-            <div>{newReview.text}</div>
-            {renderStars(newReview.valoration)}
-          </li>
+          <>
+            <h4 className="text-center">Reseña reciente</h4>
+            <ul className="reviews-list">
+              <li className="review current-user-review">
+                <p>{newReview.username}</p>
+                <div>{newReview.text}</div>
+                {renderStars(newReview.valoration)}
+              </li>
+            </ul>
+          </>
         )}
-        {data.data.reviews.length === 0 ||
-        data.data.reviews.every((review) => review.visible === false) ? (
+        {(data.data.reviews.length === 0 ||
+          data.data.reviews.every((review) => review.visible === false)) &&
+        newReview == null ? (
           <p className="text-center">No hay reseñas aún.</p>
         ) : (
           <ul className="reviews-list">

@@ -42,7 +42,6 @@ const Productos = () => {
       .then((data) => {
         // console.log(data);
         if (data === true) {
-          console.log("Entro bien");
           cart.clearCart();
           // cerrar modal
           setShowCart(false);
@@ -60,10 +59,9 @@ const Productos = () => {
           });
           fetchProducts();
         } else if (data === false) {
-          console.log("me la metan mal");
           setShowCart(false);
           //Notification
-          toast.warn("Algo salió mal", {
+          toast.error("Algo salió mal", {
             position: "top-right",
             autoClose: 5000,
             icon: "😟",
@@ -95,12 +93,11 @@ const Productos = () => {
       });
 
       if (!error) {
-        console.log("Pago exitoso:", paymentMethod);
-        console.log();
+        // console.log("Pago exitoso:", paymentMethod);
         try {
           const userEmail = JSON.parse(localStorage.getItem("user")).email;
-          const data = await pay(userEmail);
-          console.log(data);
+          await pay(userEmail);
+          // console.log(data);
         } catch (error) {
           console.error("Error al procesar el pago:", error);
         }
@@ -114,9 +111,15 @@ const Productos = () => {
         <div className="card-element-container">
           <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Pagar
-        </button>
+        {cart.cartItems.length === 0 ? (
+          <button className="btn btn-primary flex-grow-1 m-1" disabled>
+            Pagar
+          </button>
+        ) : (
+          <button type="submit" className="btn btn-primary">
+            Pagar
+          </button>
+        )}
       </form>
     );
   };
