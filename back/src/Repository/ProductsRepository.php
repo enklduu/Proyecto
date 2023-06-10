@@ -39,7 +39,20 @@ class ProductsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
+    public function updateProductStock(int $productId, int $quantity): void
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery('
+        UPDATE App\Entity\Products p
+        SET p.stock = p.stock + :quantity
+        WHERE p.id = :productId
+    ');
+        $query->setParameter('quantity', $quantity);
+        $query->setParameter('productId', $productId);
+        $query->execute();
+    }
+    //    /**
 //     * @return Products[] Returns an array of Products objects
 //     */
 //    public function findByExampleField($value): array
@@ -54,7 +67,7 @@ class ProductsRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Products
+    //    public function findOneBySomeField($value): ?Products
 //    {
 //        return $this->createQueryBuilder('p')
 //            ->andWhere('p.exampleField = :val')

@@ -39,7 +39,17 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
+    public function findActiveOrder($user): ?Order
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.status = :status')
+            ->andWhere('o.user = :user')
+            ->setParameter('status', 0) // Considerando que 0 representa el estado de pedido activo
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    //    /**
 //     * @return Order[] Returns an array of Order objects
 //     */
 //    public function findByExampleField($value): array
@@ -54,7 +64,7 @@ class OrderRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Order
+    //    public function findOneBySomeField($value): ?Order
 //    {
 //        return $this->createQueryBuilder('o')
 //            ->andWhere('o.exampleField = :val')

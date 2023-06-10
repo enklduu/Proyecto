@@ -39,7 +39,7 @@ class OrderProductRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
+    //    /**
 //     * @return OrderProduct[] Returns an array of OrderProduct objects
 //     */
 //    public function findByExampleField($value): array
@@ -54,13 +54,14 @@ class OrderProductRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?OrderProduct
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByOrderAndProduct($orderId, $productId): ?OrderProduct
+    {
+        return $this->createQueryBuilder('op')
+            ->andWhere('op.indent = :orderId')
+            ->andWhere('op.product = :productId')
+            ->setParameter('orderId', $orderId)
+            ->setParameter('productId', $productId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

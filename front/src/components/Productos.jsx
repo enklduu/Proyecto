@@ -30,7 +30,9 @@ const Productos = () => {
         (item) => item.status === 0 && item.user === userEmail
       );
       // console.log(items[0]);
-      cart.setCartItems(items[0].orderProducts);
+      if (items.length !== 0) {
+        cart.setCartItems(items[0].orderProducts);
+      }
     };
 
     const fetchCategories = async () => {
@@ -41,6 +43,7 @@ const Productos = () => {
     fetchProducts();
     fetchCategories();
     fetchCartItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCategoryChange = (event) => {

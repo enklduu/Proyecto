@@ -32,7 +32,7 @@ class Products
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $reviews;
-    
+
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderProduct::class, orphanRemoval: true)]
     private Collection $orderProducts;
 

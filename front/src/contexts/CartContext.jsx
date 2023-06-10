@@ -32,19 +32,17 @@ export const CartProvider = ({ children }) => {
       // Lo cambiamos al context
       setCartItems(updatedCartItems);
       // Cambiamos el order del la base de datos
-
       await axios.post("http://localhost:8000/api/cart/add", {
-        userId: JSON.parse(localStorage).id, // Asegúrate de obtener el ID del usuario logeado
+        userId: JSON.parse(localStorage.getItem("user")).id, // Asegúrate de obtener el ID del usuario logeado
         productId: product.id,
       });
-
       // Otras acciones después de agregar el producto al carrito...
     } catch (error) {
       // Manejo de errores
     }
   };
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = async (productId) => {
     const updatedCartItems = [...cartItems];
     const existingItemIndex = updatedCartItems.findIndex(
       (item) => item.id === productId
@@ -64,8 +62,13 @@ export const CartProvider = ({ children }) => {
         // Si la cantidad es igual a 1, eliminamos el producto del carrito
         updatedCartItems.splice(existingItemIndex, 1);
       }
-
+      // Cambiamos el context
       setCartItems(updatedCartItems);
+      //Cambiamos la base de datos
+      await axios.post("http://localhost:8000/api/cart/remove", {
+        userId: JSON.parse(localStorage.getItem("user")).id, // Asegúrate de obtener el ID del usuario logeado
+        productId: productId,
+      });
     }
   };
 

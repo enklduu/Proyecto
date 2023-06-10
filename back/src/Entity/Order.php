@@ -23,7 +23,7 @@ class Order
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\OneToMany(mappedBy: 'indent', targetEntity: OrderProduct::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'indent', targetEntity: OrderProduct::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $orderProducts;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]

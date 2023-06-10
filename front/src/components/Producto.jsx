@@ -62,26 +62,32 @@ const Producto = ({ product, categories, setDelatador }) => {
     <>
       <div
         className="card m-auto container-fluid reset-padding"
-        style={{ width: "18rem", minHeight: "400px", maxHeight: "100%" }}
+        style={{ width: "16rem", minHeight: "400px", maxHeight: "100%" }}
       >
         <Link to={"/products/" + product.id}>
           <img
             className="card-img-top img-fluid"
             src={"../images/products/" + product.img}
             alt="Product"
-            style={{ objectFit: "cover", height: "200px" }}
+            style={{ objectFit: "cover", height: "180px" }}
           />
         </Link>
         <div className="card-body border-top d-flex flex-column text-center">
           <h5 className="card-title">{product.name}</h5>
           {/* <p className="card-text">{product.description}</p> */}
           <p className="card-text">{"Precio -> " + product.price + "€"}</p>
-          <p className="card-text">
-            {"En el carrito -> " +
-              getProductAmountInCart(product.id) +
-              " Stock -> " +
-              product.stock}
-          </p>
+          {JSON.parse(localStorage.getItem("user")).roles.includes(
+            "ROLE_ADMIN"
+          ) ? (
+            <></>
+          ) : (
+            <p className="card-text">
+              {"En el carrito -> " +
+                getProductAmountInCart(product.id) +
+                " Stock -> " +
+                product.stock}
+            </p>
+          )}
           <div className="d-flex justify-content-center">
             {!product.visible && (
               <div className="icon-container">

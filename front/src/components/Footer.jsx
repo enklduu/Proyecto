@@ -67,7 +67,10 @@ const Footer = () => {
             <div>
               <p>13abrilfloristerias@gmail.com</p>
             </div>
-            <div>Valoración media : {valoration===0 ? "😿": renderStars(valoration) }</div>
+            <div>
+              Valoración media :{" "}
+              {valoration === 0 ? "😿" : renderStars(valoration)}
+            </div>
           </div>
         </div>
       </div>

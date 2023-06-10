@@ -21,11 +21,13 @@ const App = () => {
       element: <Layout />,
       errorElement: <Error />,
       children: [
-        { index: true, element: <Main />},
+        { index: true, element: <Main /> },
         {
           path: "/login",
           element: (
-            <PrivateRoute isAllowed={ user && localStorage.getItem("user") ? false : true}>
+            <PrivateRoute
+              isAllowed={user && localStorage.getItem("user") ? false : true}
+            >
               <Login />
             </PrivateRoute>
           ),
@@ -33,7 +35,7 @@ const App = () => {
         {
           path: "/register",
           element: (
-            <PrivateRoute isAllowed={ user ? false : true}>
+            <PrivateRoute isAllowed={user ? false : true}>
               <Register />
             </PrivateRoute>
           ),
@@ -41,31 +43,51 @@ const App = () => {
         {
           path: "/user",
           element: (
-            <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
+            <PrivateRoute
+              isAllowed={localStorage.getItem("user") ? true : false}
+            >
               <UserInfo />
             </PrivateRoute>
           ),
         },
         {
           path: "/admin",
-          element: <PrivateRoute isAllowed={(localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).roles.includes('ROLE_ADMIN') )? true : false}>
-          <Admin />
-        </PrivateRoute>,
+          element: (
+            <PrivateRoute
+              isAllowed={
+                localStorage.getItem("user") &&
+                JSON.parse(localStorage.getItem("user")).roles.includes(
+                  "ROLE_ADMIN"
+                )
+                  ? true
+                  : false
+              }
+            >
+              <Admin />
+            </PrivateRoute>
+          ),
         },
         {
           path: "/products",
-          element: <PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
-          <Products />
-          </PrivateRoute>,
+          element: (
+            <PrivateRoute
+              isAllowed={localStorage.getItem("user") ? true : false}
+            >
+              <Products />
+            </PrivateRoute>
+          ),
         },
         {
           path: "/products/:id",
           loader: ({ params }) => getProduct(params.id),
-          element:<PrivateRoute isAllowed={localStorage.getItem("user") ? true : false}>
-          <ProductInfo />
-          </PrivateRoute>,
+          element: (
+            <PrivateRoute
+              isAllowed={localStorage.getItem("user") ? true : false}
+            >
+              <ProductInfo />
+            </PrivateRoute>
+          ),
         },
-
       ],
     },
   ]);
