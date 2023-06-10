@@ -4,6 +4,15 @@ import Producto from "./Producto";
 import NewProduct from "./NewProduct";
 import ReactModal from "react-modal";
 import { CartContext } from "../contexts/CartContext";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Productos = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -17,6 +26,100 @@ const Productos = () => {
 
   const cart = useContext(CartContext);
 
+  const stripePromise = loadStripe(
+    "pk_test_51MZHTWEqp3CmKNmxoUnpZ8QMXX9QYWyg9GxfTCLmKnYLLe4gKRrTP9QRLPk0COUC8WbxQuQv1iQfaORVcL5GRUzK00qiBmpUcR"
+  );
+
+  const pay = async (email) => {
+    fetch("http://127.0.0.1:8000/api/cart/pay", {
+      method: "PUT",
+      body: JSON.stringify({ status: 1, email: email }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+        if (data === true) {
+          console.log("Entro bien");
+          cart.clearCart();
+          // cerrar modal
+          setShowCart(false);
+          // Notificacion
+          toast.info("Tu pedido se ha realizado correctamente", {
+            position: "top-right",
+            autoClose: 5000,
+            icon: "😀",
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          fetchProducts();
+        } else if (data === false) {
+          console.log("me la metan mal");
+          setShowCart(false);
+          //Notification
+          toast.warn("Algo salió mal", {
+            position: "top-right",
+            autoClose: 5000,
+            icon: "😟",
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const CheckoutForm = () => {
+    // console.log(cart);
+    const stripe = useStripe();
+    const elements = useElements();
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: "card",
+        card: elements.getElement(CardElement),
+      });
+
+      if (!error) {
+        console.log("Pago exitoso:", paymentMethod);
+        console.log();
+        try {
+          const userEmail = JSON.parse(localStorage.getItem("user")).email;
+          const data = await pay(userEmail);
+          console.log(data);
+        } catch (error) {
+          console.error("Error al procesar el pago:", error);
+        }
+      } else {
+        console.error("Error al procesar el pago:", error);
+      }
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="checkout-form">
+        <div className="card-element-container">
+          <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Pagar
+        </button>
+      </form>
+    );
+  };
   const fetchProducts = async () => {
     const response = await axios.get("http://127.0.0.1:8000/api/products");
     setProducts(response.data);
@@ -123,6 +226,11 @@ const Productos = () => {
                   </li>
                 ))}
               </ul>
+              <div className="productos-container">
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm />
+                </Elements>
+              </div>
               <button className="btn btn-primary" onClick={handleCart}>
                 Cerrar
               </button>
@@ -237,6 +345,18 @@ const Productos = () => {
           </>
         )}
       </ul>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </>
   );
 };

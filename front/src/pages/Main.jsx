@@ -10,38 +10,28 @@ import "react-toastify/dist/ReactToastify.css";
 const Main = () => {
   const auth = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [pedidos, setPedidos] = useState([]);
 
-  useEffect(() => {
-    const hasVisitedPage = localStorage.getItem("hasVisitedPage");
-    if (!hasVisitedPage) {
-      localStorage.setItem("hasVisitedPage", "true");
-      console.log("Ahora ya si la he visitado");
-    } else {
-      setModalVisible(true);
+  const fetchPedidos = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/orders");
+      const data = await response.json();
+
+      const ordersToDo = data.filter((order) => order.status === 1);
+      setPedidos(ordersToDo);
+    } catch (error) {
+      console.log(error);
     }
-  }, []);
+  };
 
   useEffect(() => {
     if (
-      auth.user &&
-      auth.user.roles.includes("ROLE_ADMIN") &&
-      auth.user.orders.some((order) => order.status === 1)
+      JSON.parse(localStorage.getItem("user")) &&
+      JSON.parse(localStorage.getItem("user")).orders.some(
+        (order) => order.status === 2
+      )
     ) {
-      toast("Tienes pedidos que hacer", {
-        position: "top-right",
-        autoClose: 5000,
-        icon: "🌼",
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    } else if (
-      auth.user &&
-      auth.user.orders.some((order) => order.status === 2)
-    ) {
+      console.log("Hola");
       toast.warn("Tienes pedidos listos para recoger", {
         position: "top-right",
         autoClose: 5000,
@@ -54,8 +44,37 @@ const Main = () => {
         theme: "dark",
       });
     }
-  }, [auth.user]);
 
+    if (
+      JSON.parse(localStorage.getItem("user")) &&
+      JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") &&
+      pedidos.length > 0
+    ) {
+      console.log("Hola");
+      toast.info("Tienes pedidos que hacer", {
+        position: "top-right",
+        autoClose: 5000,
+        icon: "🌼",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+
+    const hasVisitedPage = localStorage.getItem("hasVisitedPage");
+    if (!hasVisitedPage) {
+      localStorage.setItem("hasVisitedPage", "true");
+      // console.log("Ahora ya si la he visitado");
+    } else {
+      setModalVisible(true);
+    }
+    fetchPedidos();
+  }, []);
+
+  console.log(pedidos);
   return (
     <>
       {auth.user ? (

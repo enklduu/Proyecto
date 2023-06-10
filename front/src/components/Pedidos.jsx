@@ -49,8 +49,6 @@ const Pedidos = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        localStorage.setItem("user", JSON.stringify(data));
-        auth.setUser(data);
         actualizarPedidos(pedidoId);
       })
       .catch((error) => {

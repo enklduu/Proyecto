@@ -393,9 +393,6 @@ class ApiController extends AbstractController
             // Eliminar el producto del pedido si solo hay 1 producto
             $order->removeOrderProduct($existingOrderProduct);
             $orderProductRepository->remove($existingOrderProduct);
-
-            // Actualizar el stock del producto
-            $productsRepository->updateProductStock($productId, 1); // Incrementar el stock en 1
         }
 
         // Actualizar el total del pedido
@@ -424,6 +421,39 @@ class ApiController extends AbstractController
         $user = $userRepository->findOneByEmail($email);
         $userJSON = $apiFormatter->data($user);
         return new JsonResponse($userJSON);
+    }
+
+    // Pagar cart
+    #[Route('/cart/pay', name: 'app_api_pay_cart', methods: ["PUT"])]
+    public function payCart(ApiFormatter $apiFormatter, OrderRepository $orderRepository, ProductsRepository $productsRepository, UserRepository $userRepository, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $enoughStock = true; // Variable para verificar si hay suficiente stock para todos los productos
+        $order = $orderRepository->findActiveOrder($userRepository->findOneByEmail($data['email']));
+
+        foreach ($order->getOrderProducts() as $orderProduct) {
+            $product = $orderProduct->getProduct();
+            $quantity = $orderProduct->getAmount();
+
+            // Verificar si hay suficiente stock del producto
+            if (($product->getStock()) >= $quantity) {
+                $productsRepository->updateProductStock($product->getId(), $quantity);
+            } else {
+                $enoughStock = false;
+                break; // Salir del bucle si no hay suficiente stock para un producto
+            }
+        }
+
+        if ($enoughStock) {
+            $order->setStatus($data['status']);
+            $orderRepository->save($order, true);
+            return new JsonResponse(true);
+        } else {
+            // Si no hay suficiente stock para un producto, se devuelve una respuesta indicando eso
+            return new JsonResponse(false);
+        }
+
+
     }
 
     // Modifica el user

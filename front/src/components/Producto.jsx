@@ -4,6 +4,8 @@ import ProductForm from "./ProductForm";
 import { Link } from "react-router-dom";
 import { FaEyeSlash, FaCartPlus } from "react-icons/fa";
 import { CartContext } from "../contexts/CartContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Producto = ({ product, categories, setDelatador }) => {
   const [editingProduct, setEditingProduct] = useState(null);
@@ -16,9 +18,17 @@ const Producto = ({ product, categories, setDelatador }) => {
     if (getProductAmountInCart(product.id) < product.stock) {
       cart.addToCart(product);
     } else {
-      alert(
-        "Lamentablemente en este momento no disponemos tanto de este producto"
-      );
+      toast.warn("No puedes añadir más", {
+        position: "top-right",
+        autoClose: 5000,
+        icon: "😡",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
   const handleRemoveFromCart = (product) => {
@@ -167,6 +177,18 @@ const Producto = ({ product, categories, setDelatador }) => {
             </div>
           )}
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </>
   );
 };

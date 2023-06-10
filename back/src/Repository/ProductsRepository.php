@@ -45,7 +45,7 @@ class ProductsRepository extends ServiceEntityRepository
 
         $query = $entityManager->createQuery('
         UPDATE App\Entity\Products p
-        SET p.stock = p.stock + :quantity
+        SET p.stock = p.stock - :quantity
         WHERE p.id = :productId
     ');
         $query->setParameter('quantity', $quantity);
