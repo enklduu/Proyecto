@@ -61,11 +61,11 @@ const ProductForm = ({ product, categories, show, setShow, setDelatador }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product, formik.setValues]);
 
-  console.log(product);
+  // console.log(product);
   return (
-    <>
+    <div className=" d-flex flex-column">
       {show && (
-        <Form onSubmit={formik.handleSubmit}>
+        <Form className="form-edit" onSubmit={formik.handleSubmit}>
           <h2>Editar</h2>
           <Form.Group controlId="name">
             <Form.Label>Nombre</Form.Label>
@@ -180,7 +180,7 @@ const ProductForm = ({ product, categories, show, setShow, setDelatador }) => {
           <Button type="submit">Guardar</Button>
         </Form>
       )}
-    </>
+    </div>
   );
 };
 

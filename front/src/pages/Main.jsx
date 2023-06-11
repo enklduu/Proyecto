@@ -52,7 +52,7 @@ const Main = () => {
       setModalVisible(true);
     }
     fetchPedidos();
-    console.log(pedidos);
+    // console.log(pedidos);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -101,15 +101,18 @@ const Main = () => {
           fontSize: "16px",
           textAlign: "center",
           padding: "20px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+          borderRadius: "4px",
         }}
         buttonStyle={{
-          background: "#0069d9",
+          background: "#e3aa97",
           color: "white",
           fontSize: "14px",
           padding: "10px 20px",
           border: "none",
           borderRadius: "4px",
           cursor: "pointer",
+          marginTop: "10px",
         }}
       >
         Esta página usa cookies para asegurarse de que tienes la mejor de las

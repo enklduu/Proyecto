@@ -46,7 +46,11 @@ const Reviews = () => {
       <div className="row">
         <hr />
         <div className="col-md-12">
-          <h2 onClick={toggleReviewList} style={{ cursor: "pointer" }}>
+          <h2
+            onClick={toggleReviewList}
+            className="btn button-like"
+            style={{ cursor: "pointer" }}
+          >
             {showReviews ? "Lista de reseñas" : "Lista de reseñas"}
           </h2>
           {showReviews &&
@@ -63,7 +67,7 @@ const Reviews = () => {
                       </p>
                     </div>
                     <button
-                      className="btn btn-primary"
+                      className="btn button-like"
                       onClick={() => handleClick(review)}
                     >
                       {review.visible ? "Ocultar" : "Mostrar"}

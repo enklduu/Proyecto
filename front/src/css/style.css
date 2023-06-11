@@ -14,28 +14,95 @@ body {
   flex-direction: column;
 }
 
-/* Modal CSS */
+/* CSS -> Navbar */
+
+.header {
+  width: 100%;
+  background-color: #333;
+}
+.navbar-toggler {
+  margin-right: 3rem;
+}
+.navbar-toggler {
+  box-shadow: 0px 0px 5px #aaa;
+}
+.collapse {
+  display: flex;
+  justify-content: start;
+  margin-left: 1rem;
+}
+.navbar-nav li {
+  list-style: none;
+}
+.navbar-nav li a,
+.a-home {
+  font-size: 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+.navbar-nav li a::before {
+  content: attr(data-text);
+  position: absolute;
+  color: var(--clr);
+  width: 0;
+  overflow: hidden;
+  transition: 1s;
+  border-right: 8px solid var(--clr);
+  -webkit-text-stroke: 1px var(--clr);
+}
+.a-home::before {
+  content: attr(data-text);
+  position: absolute;
+  color: var(--clr);
+  width: 0;
+  overflow: hidden;
+  transition: 1s;
+  border-right: 8px solid var(--clr);
+  -webkit-text-stroke: 1px var(--clr);
+}
+.navbar-nav li a:hover::before {
+  width: 100%;
+  filter: drop-shadow(0 0 25px var(--clr));
+}
+.a-home:hover::before {
+  width: 100%;
+  filter: drop-shadow(0 0 25px var(--clr));
+}
+.nav-link {
+  margin: 10px;
+  padding: 10px;
+}
+.nav-item {
+  margin-left: 10px;
+}
+.active {
+  /* background-color: #9d0f0f; */
+  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.5) inset;
+}
+
+/* CSS Modales -> Cart y valoration */
 
 .modal-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  display: none;
 }
-
 .modal-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  min-height: 100%;
   background: #f5f5f5;
-  height: 100%;
   border-radius: 8px;
   box-shadow: 0 2px 4px #333;
 }
 
-/* Stars CSS */
+/* CSS Stars -> Reviews y Valoration */
 
 .estrellas-mini {
   direction: rtl;
@@ -63,7 +130,7 @@ body {
   margin-bottom: 10px;
 }
 
-/* Reviews CSS */
+/* CSS Reviews -> En Product Info  */
 
 .reviews-container {
   display: grid;
@@ -99,6 +166,73 @@ body {
   color: #333;
 }
 
+/* CSS -> Footer */
+.footer {
+  margin-top: auto;
+  background-color: #333;
+  color: #fff;
+  padding: 30px 0;
+  text-align: center;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.footer hr {
+  border-color: #fff;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.footer p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer a:hover {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+}
+
+.footer .valoration {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.footer .valoration .emoji {
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.footer a.facebook,
+.footer a.instagram {
+  font-size: 2rem;
+}
+
+.footer a.facebook:hover {
+  color: #3b5998;
+}
+
+.footer a.instagram:hover {
+  color: #c13584;
+}
+
+@media (max-width: 768px) {
+  .footer .row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer .col-md-4 {
+    margin-bottom: 30px;
+  }
+}
+
 /* Formateo input type file */
 /*  */
 .file-input-container {
@@ -110,6 +244,58 @@ body {
   display: none;
 }
 
+/* CSS -> Inputs */
+
+.checkbox-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.checkbox-item {
+  display: flex;
+  align-items: center;
+}
+.check-box-group {
+  display: flex;
+  flex-direction: column;
+}
+.custom-checkbox {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+.custom-checkbox .label {
+  font-size: 1.2em;
+  margin: 0 10px;
+}
+.custom-checkbox .checkmark {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #333;
+  display: inline-block;
+  border-radius: 3px;
+  background: #222 url("../../public/images/white_check.png") center/1250%
+    no-repeat;
+  transition: background-size 0.2s ease;
+}
+.custom-checkbox input:checked + .checkmark {
+  background-size: 60%;
+  transition: background-size 0.25s cubic-bezier(0.7, 0, 0.18, 1.24);
+}
+.custom-checkbox input {
+  display: none;
+}
+
+/* CSS -> Stripe */
+.checkout-form {
+  width: 100vh;
+  margin: 0 auto;
+}
+.card-element-container {
+  margin-bottom: 16px;
+}
+
 /* Formateao diseño del bootstrap */
 
 .card {
@@ -118,16 +304,13 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .card-img-top {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
-
 .card-body {
   padding: 20px;
 }
-
 .card-title {
   font-size: 20px;
   font-weight: bold;
@@ -151,64 +334,133 @@ body {
   background-color: #fecccb;
   border-color: #fdb5b4;
 }
+.btn-secondary {
+  color: #333;
+  background-color: #ffca08;
+  border-color: #ffb908;
+}
+.btn-secondary:hover {
+  color: #fff;
+  background-color: #333;
+  border-color: #222;
+}
 .btn:disabled {
   background-color: #fecccb;
   border-color: #fdb5b4;
   color: #333;
 }
-
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
   background-color: #c84f60;
   border-color: #c24556;
   color: white;
 }
 
-/* Input checkbox raro */
+/* CSS -> Forms */
+.form {
+  padding: 15px;
+  border: 2px solid #ccc;
+  width: 90%;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0px 0px 35px #aaa;
+}
+.form-edit {
+  padding: 15px;
+  border: 2px solid #ccc;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0px 0px 35px #aaa;
+}
 
-.checkbox-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.checkbox-item {
-  display: flex;
-  align-items: center;
-}
-.check-box-group {
-  display: flex;
-  flex-direction: column;
+.form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
-.custom-checkbox {
+.form input[type="text"],
+.form input[type="email"],
+.form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.form textarea {
+  height: 100px;
+}
+
+.form input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
 }
 
-.custom-checkbox .label {
-  font-size: 1.2em;
-  margin: 0 10px;
+.form input[type="submit"]:hover {
+  background-color: #45a049;
 }
 
-.custom-checkbox .checkmark {
-  width: 15px;
-  height: 15px;
-  border: 2px solid #333;
-  display: inline-block;
-  border-radius: 3px;
-  background: #222 url("../../public/images/white_check.png") center/1250%
-    no-repeat;
-  transition: background-size 0.2s ease;
+/* CSS -> Register, Login */
+
+/* .form-user {
+  padding: 15px;
+  border: 2px solid #fff;
+  font-size: 1rem;
+  color: #222;
+  width: 90%;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 0px 50px #fff;
+} */
+
+.form-user {
+  padding: 15px;
+  border: 2px solid #ccc;
+  width: 90%;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 0px 35px #aaa;
+  backdrop-filter: blur(1px);
 }
 
-.custom-checkbox input:checked + .checkmark {
-  background-size: 60%;
-  transition: background-size 0.25s cubic-bezier(0.7, 0, 0.18, 1.24);
+.form-user input[type="text"],
+.form-user input[type="password"] {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  transition: border-color 0.3s ease;
 }
 
-.custom-checkbox input {
-  display: none;
+.form-user input[type="text"]:focus,
+.form-user input[type="password"]:focus {
+  outline: none;
+  border-color: #aaa;
+}
+
+.form-user button {
+  background-color: transparent;
+  color: #333;
+  border: 1px solid #fff;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.form-user button:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: 1px solid #fff;
 }
 
 .reset-padding {
@@ -223,18 +475,23 @@ body {
   background-position: center;
   min-height: 100vh;
 }
-.footer {
-  margin-top: auto;
+
+/* Generales */
+
+.button-like {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #c84f60;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Navbar */
-
-
-.checkout-form {
-  width: 100vh;
-  margin: 0 auto;
-}
-
-.card-element-container {
-  margin-bottom: 16px;
+.button-like:hover {
+  background-color: #fecccb;
+  color: #333;
 }

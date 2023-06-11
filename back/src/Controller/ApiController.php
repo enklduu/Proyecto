@@ -201,6 +201,24 @@ class ApiController extends AbstractController
         $productJSON = $apiFormatter->productToArray($product);
         return new JsonResponse($productJSON);
     }
+    // Crear nueva categoría
+    #[Route('/new-category', name: 'app_api_new_category', methods: ["POST"])]
+    public function newCategory(ApiFormatter $apiFormatter, CategoryRepository $categoryRepository, Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $name = $request->request->get('name');
+        $visible = 0;
+        if ($request->request->get('visible') == "true") {
+            $visible = 1;
+        }
+        // return new JsonResponse($visible);
+        $category = new Category();
+        $category->setName($name);
+        $category->setVisible($visible);
+        $entityManager->persist($category);
+        $entityManager->flush();
+        return new JsonResponse($apiFormatter->categoryToArray($category));
+    }
 
 
     // Crear nuevo producto

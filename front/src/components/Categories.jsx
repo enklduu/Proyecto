@@ -45,7 +45,11 @@ const Categories = () => {
       <div className="row">
         <hr />
         <div className="col-md-12">
-          <h2 onClick={toggleCategoryList} style={{ cursor: "pointer" }}>
+          <h2
+            onClick={toggleCategoryList}
+            className="btn button-like"
+            style={{ cursor: "pointer" }}
+          >
             {showCategories ? "Lista de categorias" : "Lista de categorias"}
           </h2>
           {showCategories &&
@@ -59,7 +63,7 @@ const Categories = () => {
                       <p className="card-text">Categoría: {category.name}</p>
                     </div>
                     <button
-                      className="btn btn-primary"
+                      className="btn button-like"
                       onClick={() => handleClick(category)}
                     >
                       {category.visible ? "Ocultar" : "Mostrar"}

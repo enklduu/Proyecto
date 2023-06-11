@@ -41,7 +41,7 @@ const Users = () => {
       <div className="row">
         <hr />
         <div className="col-md-12">
-          <h2 onClick={toggleUserList} style={{ cursor: "pointer" }}>
+          <h2 onClick={toggleUserList} className="btn button-like" style={{ cursor: "pointer" }}>
             {showUsers ? "Lista de usuarios" : "Lista de usuarios"}
           </h2>
           {showUsers &&
@@ -62,7 +62,7 @@ const Users = () => {
                       <></>
                     ) : (
                       <button
-                        className="btn btn-primary"
+                        className="btn button-like"
                         onClick={() => handleClick(user)}
                       >
                         {user.roles.includes("ROLE_ADMIN")

@@ -13,6 +13,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NewCategory from "./NewCategory";
 
 const Productos = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -20,6 +21,7 @@ const Productos = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [showCreateCategory, setShowCreateCategory] = useState(false);
   const [delatador, setDelatador] = useState(false);
 
   const [showCart, setShowCart] = useState(false);
@@ -87,7 +89,7 @@ const Productos = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
 
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
+      const { error } = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardElement),
       });
@@ -127,6 +129,10 @@ const Productos = () => {
     const response = await axios.get("http://127.0.0.1:8000/api/products");
     setProducts(response.data);
   };
+  const fetchCategories = async () => {
+    const response = await axios.get("http://127.0.0.1:8000/api/category");
+    setCategories(response.data);
+  };
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -139,11 +145,6 @@ const Productos = () => {
       if (items.length !== 0) {
         cart.setCartItems(items[0].orderProducts);
       }
-    };
-
-    const fetchCategories = async () => {
-      const response = await axios.get("http://127.0.0.1:8000/api/category");
-      setCategories(response.data);
     };
 
     fetchProducts();
@@ -187,13 +188,21 @@ const Productos = () => {
 
   const handleCreateProduct = () => {
     setShowCreate(!showCreate);
+    setShowCreateCategory(false);
   };
+
+  const handleCreateCategory = () => {
+    setShowCreateCategory(!showCreateCategory);
+    setShowCreate(false);
+  };
+
   const handleCart = () => {
     setShowCart(!showCart);
   };
   // Hacemos el fetch de nuevo para que se recarge la info de la página pero sin generar bucles en el useEffect
   if (delatador) {
     fetchProducts();
+    fetchCategories();
     setDelatador(!delatador);
   }
 
@@ -201,18 +210,31 @@ const Productos = () => {
     <>
       {JSON.parse(localStorage.getItem("user")).roles.includes("ROLE_ADMIN") ? (
         <>
-          <button
-            className="btn btn-primary mb-3"
-            onClick={handleCreateProduct}
-          >
-            Crear Producto
-          </button>
+          <div className="d-flex">
+            <button
+              className="btn btn-primary m-3 flex-grow-1"
+              onClick={handleCreateProduct}
+            >
+              Crear Producto
+            </button>
+            <button
+              className="btn btn-primary m-3 flex-grow-1"
+              onClick={handleCreateCategory}
+            >
+              Crear Categoría
+            </button>
+          </div>
           <NewProduct
             show={showCreate}
             setShow={setShowCreate}
             categories={categories}
             setDelatador={setDelatador}
-          />{" "}
+          />
+          <NewCategory
+            show={showCreateCategory}
+            setShow={setShowCreateCategory}
+            setDelatador={setDelatador}
+          />
         </>
       ) : (
         <>

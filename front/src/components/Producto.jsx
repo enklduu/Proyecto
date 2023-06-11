@@ -166,15 +166,13 @@ const Producto = ({ product, categories, setDelatador }) => {
           JSON.parse(localStorage.getItem("user")).roles.includes(
             "ROLE_ADMIN"
           ) && (
-            <div className="">
-              <ProductForm
-                product={editingProduct}
-                categories={categories}
-                show={showForm}
-                setShow={setShowForm}
-                setDelatador={setDelatador}
-              />
-            </div>
+            <ProductForm
+              product={editingProduct}
+              categories={categories}
+              show={showForm}
+              setShow={setShowForm}
+              setDelatador={setDelatador}
+            />
           )}
       </div>
       <ToastContainer

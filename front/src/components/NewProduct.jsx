@@ -56,6 +56,7 @@ const NewProduct = ({ categories, show, setShow, setDelatador }) => {
         })
         .then((response) => {
           //   console.log(response);
+          formik.resetForm();
           setShow(false);
           setDelatador(true);
         })
@@ -69,9 +70,9 @@ const NewProduct = ({ categories, show, setShow, setDelatador }) => {
     <>
       <div>
         {show && (
-          <div className="card reset-padding">
+          <div className="form">
             <Form onSubmit={formik.handleSubmit}>
-              <h2>Crear</h2>
+              <h2>Crear Producto</h2>
               <Form.Group controlId="name">
                 <Form.Label>Nombre</Form.Label>
                 <Form.Control

@@ -72,7 +72,7 @@ const LoginForm = () => {
         </div>
       ) : (
         <Card
-          className="container mt-5 mx-auto"
+          className="container mt-5 mx-auto form-user"
           style={{ minWidth: "100px", maxWidth: "550px" }}
         >
           <Card.Body>
@@ -117,7 +117,10 @@ const LoginForm = () => {
               </div>
             </Form>
             <div className="text-center mt-3">
-              ¿No tienes una cuenta? - <Link to={"/register"}>Registrate</Link>
+              ¿No tienes una cuenta? -{" "}
+              <Link className="btn btn-primary" to={"/register"}>
+                Registrate
+              </Link>
             </div>
           </Card.Body>
         </Card>

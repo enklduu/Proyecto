@@ -6,12 +6,24 @@ import Categories from "../components/Categories";
 
 const Admin = () => {
   return (
-    <>
-      <Pedidos></Pedidos>
-      <Users></Users>
-      <Reviews></Reviews>
-      <Categories></Categories>
-    </>
+    <div className="container">
+      <div className="row">
+        <div className="col-md-12">
+          <Pedidos></Pedidos>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-4">
+          <Categories></Categories>
+        </div>
+        <div className="col-md-4">
+          <Reviews></Reviews>
+        </div>
+        <div className="col-md-4">
+          <Users></Users>
+        </div>
+      </div>
+    </div>
   );
 };
 

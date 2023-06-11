@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-
+import React, { useState, useEffect } from "react";
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
   const [pedidosFinalizados, setPedidosFinalizados] = useState([]);
   const [pedidosRecogidos, setPedidosRecogidos] = useState([]);
   const [showPedidosRecogidos, setShowPedidosRecogidos] = useState(false);
-  const auth = useContext(AuthContext);
   useEffect(() => {
     fetchPedidos();
   }, []);
@@ -84,7 +81,7 @@ const Pedidos = () => {
                       ))}
                     </ul>
                     <button
-                      className="btn btn-primary"
+                      className="btn button-like"
                       onClick={() => cambiarEstado(pedido.id, pedido.user)}
                     >
                       Cambiar a finalizado
@@ -118,7 +115,11 @@ const Pedidos = () => {
         <div className="row">
           <hr />
           <div className="col-md-12">
-            <h2 onClick={togglePedidosRecogidos} style={{ cursor: "pointer" }}>
+            <h2
+              onClick={togglePedidosRecogidos}
+              className="btn button-like"
+              style={{ cursor: "pointer" }}
+            >
               {showPedidosRecogidos ? "Pedidos recogidos" : "Pedidos recogidos"}
             </h2>
 

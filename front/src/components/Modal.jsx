@@ -131,7 +131,7 @@ const Modal = () => {
                 </div>
               </label>
             </div>
-            <div className="input-group centered">
+            <div className="input-group  d-flex justify-content-center">
               <label className="checkbox-label">
                 <input
                   type="checkbox"
@@ -141,7 +141,7 @@ const Modal = () => {
                 No volver a mostrar
               </label>
             </div>
-            <div className="button-group">
+            <div className="button-group d-flex justify-content-center">
               <button className="btn btn-primary">Enviar</button>
             </div>
           </form>

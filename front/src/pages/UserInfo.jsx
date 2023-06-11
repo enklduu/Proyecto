@@ -60,7 +60,6 @@ const UserInfo = () => {
             <div className="card text-center">
               <div className="card-body">
                 <h5 className="card-title">{auth.user.name}</h5>
-                <p className="card-text mt-3">{auth.user.last_name}</p>
                 <img
                   className="card-img-top"
                   src={
@@ -80,10 +79,11 @@ const UserInfo = () => {
                     id="file-input"
                     onChange={handleImageUpload}
                   />
-                  <label htmlFor="file-input" className="btn btn-primary">
-                    Cargar archivo
+                  <label htmlFor="file-input" className="btn btn-secondary">
+                    Cambiar imagen
                   </label>
                 </div>
+                <p className="card-text mt-3">{auth.user.last_name}</p>
 
                 <p className="card-text">{auth.user.email}</p>
                 {renderStars(auth.user.valoration)}
@@ -205,7 +205,7 @@ const UserInfo = () => {
                               ))}
                             </ul>
                             <button
-                              className="btn btn-primary"
+                              className="btn btn-secondary"
                               onClick={() =>
                                 cambiarEstado(order.id, auth.user.email)
                               }

@@ -39,7 +39,7 @@ const RegisterForm = () => {
         .post("http://127.0.0.1:8000/api/register", values)
         .then((response) => {
           // console.log(response);
-          toast.success("Cuenta registrada", {
+          toast.success("Cuenta registrada -> Log In", {
             position: "top-right",
             autoClose: 2500,
             icon: "👍",
@@ -76,7 +76,7 @@ const RegisterForm = () => {
   return (
     <div className="d-flex justify-content-center align-items-center bg-image">
       <Card
-        className="container mt-5 mx-auto"
+        className="container mt-5 mx-auto form-user"
         style={{ minWidth: "100px", maxWidth: "550px" }}
       >
         <Card.Body>
@@ -160,7 +160,10 @@ const RegisterForm = () => {
             </div>
           </Form>
           <div className="text-center mt-3">
-            ¿Ya tienes una cuenta? - <Link to={"/login"}>Iniciar sesión</Link>
+            ¿Ya tienes una cuenta? -{" "}
+            <Link className="btn btn-primary" to={"/login"}>
+              Iniciar sesión
+            </Link>
           </div>
         </Card.Body>
       </Card>
