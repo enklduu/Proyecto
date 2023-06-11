@@ -74,20 +74,24 @@ const Footer = () => {
                 Horario Apertura
               </Link>
             </div>
-            <div>
-              <Link to="/products" className="text-decoration-none ">
-                Tiendas
-              </Link>
-            </div>
+            {JSON.parse(localStorage.getItem("user")) ? (
+              <div>
+                <Link to="/products" className="text-decoration-none ">
+                  Tiendas
+                </Link>
+              </div>
+            ) : null}
           </div>
           <div className="col-md-4 text-center">
-            <h4>Contacto</h4>
+            <h4 id="contacto">Contacto</h4>
             <hr />
             <div>
               <p></p>
             </div>
             <div>
-              <p>67673234 - Jose </p>
+              <p>676732342 - Jose </p>
+              <p>683625982 - Jose Antonio </p>
+              <p>676732341 - Cristina </p>
             </div>
             <div>
               <p>13abrilfloristerias@gmail.com</p>

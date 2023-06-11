@@ -65,7 +65,7 @@ const Main = () => {
     pedidos.some((order) => order.status === 1)
   ) {
     console.log("Hola");
-    toast.info("Tienes pedidos que hacer", {
+    toast.error("Tienes pedidos que hacer", {
       position: "top-right",
       autoClose: 5000,
       icon: "🌼",
@@ -81,15 +81,24 @@ const Main = () => {
   return (
     <>
       {auth.user ? (
-        <></>
-      ) : (
         <>
           <Index></Index>
+          {modalVisible &&
+            auth.user.valoration == null &&
+            (auth.user.show_valoration ||
+              auth.user.show_valoration == null) && <Modal />}
+        </>
+      ) : (
+        <>
+          <Header></Header>
+          <Index></Index>
+          <Footer></Footer>
+          {/* 
           <div className="text-center mt-3">
             Por favor, <Link to="/login">inicia sesión</Link> o{" "}
             <Link to="/register">regístrate</Link> para acceder a todos los
             contenidos.
-          </div>
+          </div> */}
         </>
       )}
       <CookieConsent
@@ -120,12 +129,6 @@ const Main = () => {
         Esta página usa cookies para asegurarse de que tienes la mejor de las
         experiencias.
       </CookieConsent>
-      {modalVisible &&
-        auth.user &&
-        auth.user.valoration == null &&
-        (auth.user.show_valoration || auth.user.show_valoration == null) && (
-          <Modal />
-        )}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -138,9 +141,6 @@ const Main = () => {
         pauseOnHover={false}
         theme="dark"
       />
-      <Header></Header>
-      Hola holit
-      <Footer></Footer>
     </>
   );
 };

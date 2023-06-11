@@ -56,7 +56,7 @@ const Pedidos = () => {
   const togglePedidosRecogidos = () => {
     setShowPedidosRecogidos(!showPedidosRecogidos);
   };
-
+  console.log(pedidos);
   return (
     <>
       <div className="container text-center">
@@ -66,20 +66,48 @@ const Pedidos = () => {
             {pedidos.length === 0 ? (
               <p>No hay pedidos en proceso.</p>
             ) : (
-              pedidos.map((pedido) => (
-                <div key={pedido.id} className="card mb-3">
+              pedidos.map((pedido, index) => (
+                <div key={index} className="card mb-3">
                   <div className="card-body">
-                    <p className="card-text">ID del pedido: {pedido.id}</p>
                     <p className="card-text">
-                      Fecha del pedido:{" "}
+                      <b>Total:</b> {pedido.total}€
+                    </p>
+                    <p className="card-text">
+                      <b>Fecha del pedido:</b>{" "}
                       {new Date(pedido.date.date).toLocaleDateString()}
                     </p>
-                    <p className="card-text">Usuario: {pedido.user}</p>
-                    <ul className="list-unstyled d-flex">
-                      {pedido.orderProducts.map((product) => (
-                        <li key={product.id}></li>
-                      ))}
-                    </ul>
+                    <p className="card-text">
+                      <b>Productos:</b>
+                    </p>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Cantidad</th>
+                          <th scope="col">Imagen</th>
+                          <th scope="col">Nombre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {pedido.orderProducts.map((product, index) => (
+                          <tr key={index}>
+                            <td>{product.amount}</td>
+                            <td>
+                              <img
+                                src={"../images/products/" + product.img}
+                                alt="Product"
+                                style={{
+                                  maxWidth: "65px",
+                                  minWidth: "65px",
+                                  minHeight: "65px",
+                                  maxHeight: "65px",
+                                }}
+                              />
+                            </td>
+                            <td>{product.name}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                     <button
                       className="btn button-like"
                       onClick={() => cambiarEstado(pedido.id, pedido.user)}
@@ -96,14 +124,48 @@ const Pedidos = () => {
             {pedidosFinalizados.length === 0 ? (
               <p>No hay pedidos finalizados.</p>
             ) : (
-              pedidosFinalizados.map((pedido) => (
-                <div key={pedido.id} className="card mb-3">
+              pedidosFinalizados.map((pedido, index) => (
+                <div key={index} className="card mb-3">
                   <div className="card-body">
-                    <p className="card-text">ID del pedido: {pedido.id}</p>
                     <p className="card-text">
-                      Fecha del pedido:{" "}
+                      <b>Total:</b> {pedido.total}€
+                    </p>
+                    <p className="card-text">
+                      <b>Fecha del pedido:</b>{" "}
                       {new Date(pedido.date.date).toLocaleDateString()}
                     </p>
+                    <p className="card-text">
+                      <b>Productos:</b>
+                    </p>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Cantidad</th>
+                          <th scope="col">Imagen</th>
+                          <th scope="col">Nombre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {pedido.orderProducts.map((product, index) => (
+                          <tr key={index}>
+                            <td>{product.amount}</td>
+                            <td>
+                              <img
+                                src={"../images/products/" + product.img}
+                                alt="Product"
+                                style={{
+                                  maxWidth: "65px",
+                                  minWidth: "65px",
+                                  minHeight: "65px",
+                                  maxHeight: "65px",
+                                }}
+                              />
+                            </td>
+                            <td>{product.name}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               ))
@@ -127,14 +189,48 @@ const Pedidos = () => {
               pedidosRecogidos.length === 0 ? (
                 <p>No hay pedidos antiguos.</p>
               ) : (
-                pedidosRecogidos.map((pedido) => (
-                  <div key={pedido.id} className="card mb-3">
+                pedidosRecogidos.map((pedido, index) => (
+                  <div key={index} className="card mb-3">
                     <div className="card-body">
-                      <p className="card-text">ID del pedido: {pedido.id}</p>
                       <p className="card-text">
-                        Fecha del pedido:{" "}
+                        <b>Total:</b> {pedido.total}€
+                      </p>
+                      <p className="card-text">
+                        <b>Fecha del pedido:</b>{" "}
                         {new Date(pedido.date.date).toLocaleDateString()}
                       </p>
+                      <p className="card-text">
+                        <b>Productos:</b>
+                      </p>
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Imagen</th>
+                            <th scope="col">Nombre</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {pedido.orderProducts.map((product, index) => (
+                            <tr key={index}>
+                              <td>{product.amount}</td>
+                              <td>
+                                <img
+                                  src={"../images/products/" + product.img}
+                                  alt="Product"
+                                  style={{
+                                    maxWidth: "65px",
+                                    minWidth: "65px",
+                                    minHeight: "65px",
+                                    maxHeight: "65px",
+                                  }}
+                                />
+                              </td>
+                              <td>{product.name}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 ))
