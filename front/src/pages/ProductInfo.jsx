@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const ProductInfo = () => {
   const data = useLoaderData();
@@ -8,9 +9,9 @@ const ProductInfo = () => {
   const [valoration, setValoration] = useState(null);
   const [starsSelected, setStarsSelected] = useState(0);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const [newReview, setNewReview] = useState(null);
+  // const [newReview, setNewReview] = useState(null);
   const currentUser = JSON.parse(localStorage.getItem("user")).id;
-
+  const auth = useContext(AuthContext);
   const handleToggleReviewForm = () => {
     setShowReviewForm(!showReviewForm);
   };
@@ -53,7 +54,9 @@ const ProductInfo = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setNewReview(data);
+        localStorage.setItem("user", JSON.stringify(data));
+        auth.setUser(data);
+        // setNewReview(JSON.parse(localStorage.getItem("user")).reviews.pop());
       })
       .catch((error) => {
         console.error(error);
@@ -166,7 +169,7 @@ const ProductInfo = () => {
 
       <h2 className="text-center mt-3">Reseñas</h2>
       <div className="reviews-container">
-        {newReview && (
+        {/* {newReview && (
           <>
             <h4 className="text-center">Reseña reciente</h4>
             <ul className="reviews-list">
@@ -177,10 +180,9 @@ const ProductInfo = () => {
               </li>
             </ul>
           </>
-        )}
-        {(data.data.reviews.length === 0 ||
-          data.data.reviews.every((review) => review.visible === false)) &&
-        newReview == null ? (
+        )} */}
+        {data.data.reviews.length === 0 ||
+        data.data.reviews.every((review) => review.visible === false) ? (
           <p className="text-center">No hay reseñas aún.</p>
         ) : (
           <ul className="reviews-list">

@@ -14,6 +14,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NewCategory from "./NewCategory";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Productos = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -27,6 +28,7 @@ const Productos = () => {
   const [showCart, setShowCart] = useState(false);
 
   const cart = useContext(CartContext);
+  const auth = useContext(AuthContext);
 
   const stripePromise = loadStripe(
     "pk_test_51MZHTWEqp3CmKNmxoUnpZ8QMXX9QYWyg9GxfTCLmKnYLLe4gKRrTP9QRLPk0COUC8WbxQuQv1iQfaORVcL5GRUzK00qiBmpUcR"
@@ -43,7 +45,21 @@ const Productos = () => {
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
-        if (data === true) {
+        if (data === false) {
+          setShowCart(false);
+          //Notification
+          toast.error("Algo salió mal, revisa tu carrito", {
+            position: "top-right",
+            autoClose: 5000,
+            icon: "😟",
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else {
           cart.clearCart();
           // cerrar modal
           setShowCart(false);
@@ -59,21 +75,9 @@ const Productos = () => {
             progress: undefined,
             theme: "dark",
           });
+          localStorage.setItem("user", JSON.stringify(data));
+          auth.setUser(data);
           fetchProducts();
-        } else if (data === false) {
-          setShowCart(false);
-          //Notification
-          toast.error("Algo salió mal", {
-            position: "top-right",
-            autoClose: 5000,
-            icon: "😟",
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
         }
       })
       .catch((error) => {
@@ -244,13 +248,37 @@ const Productos = () => {
           <ReactModal isOpen={showCart} ariaHideApp={false}>
             <div className="modal-content">
               <h3>Tu Carro</h3>
-              <ul className="">
-                {cart.cartItems.map((product) => (
-                  <li key={product.id}>
-                    {product.name} - {product.amount}
-                  </li>
-                ))}
-              </ul>
+              <div className="container">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">Imagen</th>
+                      <th scope="col">Nombre</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cart.cartItems.map((product, index) => (
+                      <tr key={index}>
+                        <td>{product.amount}</td>
+                        <td>
+                          <img
+                            src={"../images/products/" + product.img}
+                            alt="Product"
+                            style={{
+                              maxWidth: "100px",
+                              minWidth: "100px",
+                              minHeight: "100px",
+                              maxHeight: "100px",
+                            }}
+                          />
+                        </td>
+                        <td>{product.name}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <div className="productos-container">
                 <Elements stripe={stripePromise}>
                   <CheckoutForm />

@@ -464,8 +464,11 @@ class ApiController extends AbstractController
 
         if ($enoughStock) {
             $order->setStatus($data['status']);
+            $email = $data['email'];
             $orderRepository->save($order, true);
-            return new JsonResponse(true);
+            $user = $userRepository->findOneByEmail($email);
+            $userJSON = $apiFormatter->data($user);
+            return new JsonResponse($userJSON);
         } else {
             // Si no hay suficiente stock para un producto, se devuelve una respuesta indicando eso
             return new JsonResponse(false);
@@ -566,9 +569,9 @@ class ApiController extends AbstractController
 
         $reviewRepository->save($review, true);
 
-        $reviewJSON = $apiFormatter->reviewToArray($review);
+        $userJSON = $apiFormatter->data($user);
 
-        return new JsonResponse($reviewJSON);
+        return new JsonResponse($userJSON);
     }
     // Edita la review (cambia rol)
     #[Route('/reviews/{id}', name: 'app_api_edit_reviews', methods: ["PUT"])]

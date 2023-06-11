@@ -46,51 +46,83 @@ const Header = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse">
-          <ul className="navbar-nav mr-auto">
-            <li
-              className={`nav-item ${
-                location.pathname === "/products" ? "active" : ""
-              }`}
-              style={{ "--clr": "#e3aa97" }}
-            >
-              <Link className="nav-link" data-text="Tienda" to="/products">
-                Tienda
-              </Link>
-            </li>
-            <li
-              className={`nav-item ${
-                location.pathname === "/user" ? "active" : ""
-              }`}
-              style={{ "--clr": "#ffca08" }}
-            >
-              <Link className="nav-link" data-text="Info" to="/user">
-                Info
-              </Link>
-            </li>
-            {user.roles.includes("ROLE_ADMIN") && (
+
+        {user ? (
+          <div className="collapse navbar-collapse">
+            <ul className="navbar-nav mr-auto">
               <li
                 className={`nav-item ${
-                  location.pathname === "/admin" ? "active" : ""
+                  location.pathname === "/products" ? "active" : ""
                 }`}
-                style={{ "--clr": "#c84f60" }}
+                style={{ "--clr": "#e3aa97" }}
               >
-                <Link className="nav-link" data-text="Admin" to="/admin">
-                  Admin
+                <Link className="nav-link" data-text="Tienda" to="/products">
+                  Tienda
                 </Link>
               </li>
-            )}
-            <li className="nav-item" style={{ "--clr": "#fecccb" }}>
-              <Link
-                className="nav-link"
-                data-text="Cerrar_Sesión"
-                onClick={logout}
+              <li
+                className={`nav-item ${
+                  location.pathname === "/user" ? "active" : ""
+                }`}
+                style={{ "--clr": "#ffca08" }}
               >
-                Cerrar_Sesión
-              </Link>
-            </li>
-          </ul>
-        </div>
+                <Link className="nav-link" data-text="Info" to="/user">
+                  Info
+                </Link>
+              </li>
+              {user.roles.includes("ROLE_ADMIN") && (
+                <li
+                  className={`nav-item ${
+                    location.pathname === "/admin" ? "active" : ""
+                  }`}
+                  style={{ "--clr": "#c84f60" }}
+                >
+                  <Link className="nav-link" data-text="Admin" to="/admin">
+                    Admin
+                  </Link>
+                </li>
+              )}
+              <li className="nav-item" style={{ "--clr": "#fecccb" }}>
+                <Link
+                  className="nav-link"
+                  data-text="Cerrar_Sesión"
+                  onClick={logout}
+                >
+                  Cerrar_Sesión
+                </Link>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <div className="collapse navbar-collapse">
+            <ul className="navbar-nav mr-auto">
+              <li
+                className={`nav-item ${
+                  location.pathname === "/products" ? "active" : ""
+                }`}
+                style={{ "--clr": "#e3aa97" }}
+              >
+                <Link className="nav-link" data-text="Log_In" to="/login">
+                  Log_In
+                </Link>
+              </li>
+              <li
+                className={`nav-item ${
+                  location.pathname === "/user" ? "active" : ""
+                }`}
+                style={{ "--clr": "#fecccb" }}
+              >
+                <Link
+                  className="nav-link"
+                  data-text="Registrate"
+                  to="/register"
+                >
+                  Registrate
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </nav>
     </header>
   );

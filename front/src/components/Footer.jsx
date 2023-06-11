@@ -47,7 +47,7 @@ const Footer = () => {
                 <FaFacebookF className="mr-2" />
               </Link>
               <Link
-                href="https://www.instagram.com/13abrilflor/?hl=es"
+                to="https://www.instagram.com/13abrilflor/?hl=es"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-decoration-none instagram"

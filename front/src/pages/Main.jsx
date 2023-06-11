@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import CookieConsent from "react-cookie-consent";
 import Modal from "../components/Modal";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Index from "../components/Index";
@@ -136,6 +138,9 @@ const Main = () => {
         pauseOnHover={false}
         theme="dark"
       />
+      <Header></Header>
+      Hola holit
+      <Footer></Footer>
     </>
   );
 };

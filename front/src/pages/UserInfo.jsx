@@ -46,7 +46,6 @@ const UserInfo = () => {
       .then((data) => {
         console.log(data);
         localStorage.setItem("user", JSON.stringify(data));
-        auth.setUser(data);
       })
       .catch((error) => {
         console.error(error);
@@ -95,8 +94,10 @@ const UserInfo = () => {
             <div className="text-center container">
               <h2>Mis reseñas</h2>
 
-              {auth.user.reviews.length === 0 ||
-              auth.user.reviews.every((review) => review.visible === false) ? (
+              {JSON.parse(localStorage.getItem("user")).reviews.length === 0 ||
+              JSON.parse(localStorage.getItem("user")).reviews.every(
+                (review) => review.visible === false
+              ) ? (
                 <p className="text-center">No hay reseñas aún.</p>
               ) : (
                 auth.user.reviews
@@ -126,48 +127,6 @@ const UserInfo = () => {
           {auth.user.orders.length !== 0 && (
             <div className="text-center container">
               <div className="row">
-                {auth.user.orders.some((order) => order.status === 1) && (
-                  <div className="col-12">
-                    <h2>Pedidos pendientes</h2>
-                    {auth.user.orders
-                      .filter((order) => order.status === 1)
-                      .map((order, index) => (
-                        <div key={index} className="card mb-3">
-                          <div className="card-body">
-                            <p className="card-text">
-                              {" "}
-                              Total : {order.total_price}€
-                            </p>
-                            <p className="card-text">
-                              Fecha del pedido:{" "}
-                              {new Date(order.date.date).toLocaleDateString()}
-                            </p>
-                            <p className="card-text">
-                              <b>Productos</b>
-                            </p>
-                            <ul className="list-unstyled">
-                              {order.order_products.map((product, index) => (
-                                <li key={index}>
-                                  <div className=" d-flex ">
-                                    {product.amount} - {product.name}{" "}
-                                    <img
-                                      src={"../images/products/" + product.img}
-                                      alt="Card image"
-                                      style={{
-                                        maxWidth: "200px",
-                                        minWidth: "200px",
-                                      }}
-                                    />
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                )}
-
                 {auth.user.orders.some((order) => order.status === 2) && (
                   <div className="col-12">
                     <h2>Pedidos para recoger</h2>
@@ -177,41 +136,109 @@ const UserInfo = () => {
                         <div key={index} className="card mb-3">
                           <div className="card-body">
                             <p className="card-text">
-                              {" "}
-                              Total : {order.total_price}€
+                              <b>Total:</b> {order.total_price}€
                             </p>
                             <p className="card-text">
-                              Fecha del pedido:{" "}
+                              <b>Fecha del pedido:</b>{" "}
                               {new Date(order.date.date).toLocaleDateString()}
                             </p>
                             <p className="card-text">
-                              <b>Productos</b>
+                              <b>Productos:</b>
                             </p>
-                            <ul className="list-unstyled">
-                              {order.order_products.map((product, index) => (
-                                <li key={index}>
-                                  <div className=" d-flex ">
-                                    {product.amount} - {product.name}{" "}
-                                    <img
-                                      src={"../images/products/" + product.img}
-                                      alt="Card image"
-                                      style={{
-                                        maxWidth: "200px",
-                                        minWidth: "200px",
-                                      }}
-                                    />
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
+                            <table className="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Cantidad</th>
+                                  <th scope="col">Imagen</th>
+                                  <th scope="col">Nombre</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {order.order_products.map((product, index) => (
+                                  <tr key={index}>
+                                    <td>{product.amount}</td>
+                                    <td>
+                                      <img
+                                        src={
+                                          "../images/products/" + product.img
+                                        }
+                                        alt="Product"
+                                        style={{
+                                          maxWidth: "100px",
+                                          minWidth: "100px",
+                                          minHeight: "100px",
+                                          maxHeight: "100px",
+                                        }}
+                                      />
+                                    </td>
+                                    <td>{product.name}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
                             <button
                               className="btn btn-secondary"
                               onClick={() =>
                                 cambiarEstado(order.id, auth.user.email)
                               }
                             >
-                              Recogido
+                              Marcar como recogido
                             </button>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+
+                {auth.user.orders.some((order) => order.status === 1) && (
+                  <div className="col-12">
+                    <h2>Pedidos pendientes</h2>
+                    {auth.user.orders
+                      .filter((order) => order.status === 1)
+                      .map((order, index) => (
+                        <div key={index} className="card mb-3">
+                          <div className="card-body">
+                            <p className="card-text">
+                              <b>Total:</b> {order.total_price}€
+                            </p>
+                            <p className="card-text">
+                              <b>Fecha del pedido:</b>{" "}
+                              {new Date(order.date.date).toLocaleDateString()}
+                            </p>
+                            <p className="card-text">
+                              <b>Productos:</b>
+                            </p>
+                            <table className="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Cantidad</th>
+                                  <th scope="col">Imagen</th>
+                                  <th scope="col">Nombre</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {order.order_products.map((product, index) => (
+                                  <tr key={index}>
+                                    <td>{product.amount}</td>
+                                    <td>
+                                      <img
+                                        src={
+                                          "../images/products/" + product.img
+                                        }
+                                        alt="Product"
+                                        style={{
+                                          maxWidth: "100px",
+                                          minWidth: "100px",
+                                          minHeight: "100px",
+                                          maxHeight: "100px",
+                                        }}
+                                      />
+                                    </td>
+                                    <td>{product.name}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       ))}
@@ -227,33 +254,46 @@ const UserInfo = () => {
                         <div key={index} className="card mb-3">
                           <div className="card-body">
                             <p className="card-text">
-                              {" "}
-                              Total : {order.total_price}€
+                              <b>Total:</b> {order.total_price}€
                             </p>
                             <p className="card-text">
-                              Fecha del pedido:{" "}
+                              <b>Fecha del pedido:</b>{" "}
                               {new Date(order.date.date).toLocaleDateString()}
                             </p>
                             <p className="card-text">
-                              <b>Productos</b>
+                              <b>Productos:</b>
                             </p>
-                            <ul className="list-unstyled">
-                              {order.order_products.map((product, index) => (
-                                <li key={index}>
-                                  <div className=" d-flex ">
-                                    {product.amount} - {product.name}{" "}
-                                    <img
-                                      src={"../images/products/" + product.img}
-                                      alt="Card image"
-                                      style={{
-                                        maxWidth: "200px",
-                                        minWidth: "200px",
-                                      }}
-                                    />
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
+                            <table className="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Cantidad</th>
+                                  <th scope="col">Imagen</th>
+                                  <th scope="col">Nombre</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {order.order_products.map((product, index) => (
+                                  <tr key={index}>
+                                    <td>{product.amount}</td>
+                                    <td>
+                                      <img
+                                        src={
+                                          "../images/products/" + product.img
+                                        }
+                                        alt="Product"
+                                        style={{
+                                          maxWidth: "100px",
+                                          minWidth: "100px",
+                                          minHeight: "100px",
+                                          maxHeight: "100px",
+                                        }}
+                                      />
+                                    </td>
+                                    <td>{product.name}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       ))}
